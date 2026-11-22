@@ -1,0 +1,667 @@
+<title>Agent Wishlist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-width workbench. Briefing strip on top, then picks, roadmap, and a filterable card wall of every idea. */
+:root {
+  --bg: #eef1f6; --surface: #ffffff; --sunk: #e3e8f0; --line: #cfd6e2;
+  --ink: #18202e; --muted: #5a6577; --accent: #3a46c9; --accent-soft: #e3e5fb;
+  --has: #1d7a4a; --has-bg: #ddf3e6; --partial: #9a5b00; --partial-bg: #fbedd5; --missing: #b42c3c; --missing-bg: #fbe1e4;
+  --parity: #355c9c; --parity-bg: #e1e9f7; --beyond: #0f7c78; --beyond-bg: #d8f1ef; --moon: #9a2f8f; --moon-bg: #f5e0f2;
+  --warn: #9a3412; --warn-bg: #fdeadf;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151d; --surface: #1a202b; --sunk: #232a37; --line: #2f3846;
+  --ink: #e6eaf2; --muted: #9aa5b8; --accent: #9aa3ff; --accent-soft: #262b52;
+  --has: #6fd59c; --has-bg: #17352a; --partial: #f0b35a; --partial-bg: #3a2c15; --missing: #ff8a96; --missing-bg: #3d1d24;
+  --parity: #8fb2f0; --parity-bg: #1d2a42; --beyond: #5fd3cc; --beyond-bg: #133432; --moon: #e58ad9; --moon-bg: #3a1c37;
+  --warn: #ffab7a; --warn-bg: #3b2217; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #11151d; --surface: #1a202b; --sunk: #232a37; --line: #2f3846;
+  --ink: #e6eaf2; --muted: #9aa5b8; --accent: #9aa3ff; --accent-soft: #262b52;
+  --has: #6fd59c; --has-bg: #17352a; --partial: #f0b35a; --partial-bg: #3a2c15; --missing: #ff8a96; --missing-bg: #3d1d24;
+  --parity: #8fb2f0; --parity-bg: #1d2a42; --beyond: #5fd3cc; --beyond-bg: #133432; --moon: #e58ad9; --moon-bg: #3a1c37;
+  --warn: #ffab7a; --warn-bg: #3b2217; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); }
+.layout { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 32px; align-items: start; }
+.wrap { display: grid; gap: 40px; padding-top: 28px; min-width: 0; }
+section, .theme-block { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 20px); }
+/* Sidebar: sticky, scrolls on its own when longer than the screen */
+.side { position: sticky; top: env(safe-area-inset-top, 0px); max-height: calc(100vh - env(safe-area-inset-top, 0px)); overflow-y: auto; padding: 28px 4px 28px 0; display: grid; gap: 18px; align-content: start; scrollbar-width: thin; }
+.side .brand { font: 700 1.15rem var(--display); color: var(--ink); }
+.side .brand small { display: block; font: 500 0.75rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+.side .grp { display: grid; gap: 2px; }
+.side .grp-label { font: 600 0.72rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0 10px 4px; }
+.side a { display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 0.93rem; border-left: 3px solid transparent; }
+.side a:hover { background: var(--sunk); }
+.side a.active { background: var(--accent-soft); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.side a .n { font: 500 0.78rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.side a.sub { padding-left: 22px; font-size: 0.88rem; }
+.side a:focus-visible, .menu-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.topbar { display: none; }
+@media (max-width: 899px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+  .topbar { display: flex; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .topbar .t { font: 700 1rem var(--display); }
+  .menu-btn { font: 600 0.9rem var(--body); background: var(--accent); color: var(--surface); border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+  .side { position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(300px, 85vw); max-height: none; background: var(--surface); border-right: 1px solid var(--line); padding: calc(env(safe-area-inset-top, 0px) + 20px) 14px 24px max(14px, env(safe-area-inset-left, 0px)); transform: translateX(-105%); transition: transform .2s ease; }
+  .side.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0,0,0,.35); }
+  section, .theme-block { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 64px); }
+}
+@media (prefers-reduced-motion: reduce) { .side { transition: none; } }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(2rem, 4vw, 2.9rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; color: var(--accent); }
+h3 { font-size: 1.08rem; }
+p { margin: 0; }
+.eyebrow { font: 500 0.78rem/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); max-width: 75ch; font-size: 1.05rem; }
+header { display: grid; gap: 10px; }
+.stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; font-variant-numeric: tabular-nums; }
+.stat b { font: 600 1.25rem var(--display); margin-right: 6px; }
+section { display: grid; gap: 14px; }
+.sec-head { display: grid; gap: 4px; }
+.sec-head p { color: var(--muted); }
+.first { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; min-width: 0; }
+.note.warn { background: var(--warn-bg); border-color: transparent; }
+.note .label { font: 600 0.8rem/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.note.warn .label { color: var(--warn); }
+.note .label.blue { color: var(--accent); }
+.note ul, .phase ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+.picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.pick { background: var(--accent-soft); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.pick .num { font: 500 0.8rem var(--mono); color: var(--accent); }
+.pick p { font-size: 0.95rem; }
+.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.phase { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.phase .step { font: 500 0.8rem var(--mono); color: var(--muted); }
+.phase.now { border-color: var(--accent); }
+.phase.now .step { color: var(--accent); }
+.filters { display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.frow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.frow .fl { font: 600 0.78rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 92px; }
+.chip { font: 500 0.85rem var(--body); border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.chip:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#q { font: inherit; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); flex: 1 1 220px; min-width: 0; }
+.count { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.theme-block { display: grid; gap: 10px; }
+.theme-block h3 { color: var(--accent); font-size: 1.15rem; }
+.theme-block > p { color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.card .top { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.card .id { font: 500 0.8rem var(--mono); color: var(--muted); }
+.card .what { font-size: 0.95rem; }
+.card .why { font-size: 0.9rem; color: var(--muted); }
+.card .why b { color: var(--ink); font-weight: 600; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 500 0.74rem/1.5 var(--mono); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.t-has { color: var(--has); background: var(--has-bg); }
+.t-partial { color: var(--partial); background: var(--partial-bg); }
+.t-missing { color: var(--missing); background: var(--missing-bg); }
+.t-parity { color: var(--parity); background: var(--parity-bg); }
+.t-beyond { color: var(--beyond); background: var(--beyond-bg); }
+.t-moonshot { color: var(--moon); background: var(--moon-bg); }
+.t-effort { color: var(--muted); background: var(--sunk); }
+.from { font-size: 0.82rem; color: var(--muted); }
+.empty { color: var(--muted); padding: 20px 0; }
+.threats { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
+.threat { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--missing); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.threat h3 { color: var(--missing); }
+.threat .k { font: 600 0.74rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.threat p { font-size: 0.93rem; }
+.threat .links { display: flex; flex-wrap: wrap; gap: 6px; }
+.threat .links a { font: 500 0.78rem var(--mono); color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 1px 7px; text-decoration: none; }
+.sub-head { display: grid; gap: 4px; margin-top: 8px; }
+.sub-head h3 { font-size: 1.15rem; color: var(--ink); }
+.sub-head p { color: var(--muted); max-width: 90ch; }
+.sub-head, #sec-rules-box { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 20px); }
+.threat.code { border-left-color: var(--partial); }
+.threat.code h3 { color: var(--partial); }
+.threat .rule { background: var(--has-bg); color: var(--ink); border-radius: 6px; padding: 8px 10px; }
+.threat .rule b { color: var(--has); }
+.card { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 72px); }
+.card:target { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 6px 18px; padding-left: 1.15em; margin: 0; }
+.sources a { color: var(--accent); overflow-wrap: anywhere; }
+footer { color: var(--muted); font-size: 0.85rem; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } .card:hover { border-color: var(--accent); } }
+
+/* Design areas */
+.area, .sub-anchor { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 20px); }
+.area { display: grid; gap: 14px; padding-top: 6px; border-top: 1px solid var(--line); }
+.area-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.area-head h3 { font-size: 1.3rem; color: var(--ink); }
+.pill { font: 600 0.74rem/1.6 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; border-radius: 999px; padding: 1px 10px; }
+.s-exploring { color: var(--muted); background: var(--sunk); }
+.s-drafted { color: var(--partial); background: var(--partial-bg); }
+.s-decided { color: var(--has); background: var(--has-bg); }
+.area > .sum { color: var(--muted); max-width: 90ch; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.box { border-radius: 10px; padding: 12px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.box ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+.box.dec { background: var(--has-bg); } .box.dec .label { color: var(--has); }
+.box.opn { background: var(--partial-bg); } .box.opn .label { color: var(--partial); }
+.box.prop { background: var(--accent-soft); } .box.prop .label { color: var(--accent); }
+.gap-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
+.gap { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.gap h3 { font-size: 1.02rem; }
+.gap .src { font-size: 0.82rem; color: var(--muted); }
+.gap .fix a { color: var(--accent); font-weight: 600; }
+.box .label { font: 600 0.78rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.box .none { color: var(--muted); font-style: italic; }
+.idea-links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.idea-links .k { font: 600 0.74rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.idea-links a { font: 500 0.8rem var(--body); color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 2px 8px; text-decoration: none; }
+.detail { display: grid; gap: 14px; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font: 600 0.76rem var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--sunk); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td .rn { font-weight: 600; color: var(--accent); white-space: nowrap; }
+.lic-ok { color: var(--has); font-weight: 600; } .lic-no { color: var(--missing); font-weight: 600; } .lic-q { color: var(--partial); font-weight: 600; }
+.repo-h { font-size: 1.02rem; color: var(--accent); }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+/* Discussion log */
+.log { display: grid; gap: 12px; }
+.entry { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; display: grid; gap: 6px; min-width: 0; }
+.entry .when { font: 500 0.8rem var(--mono); color: var(--accent); }
+.entry ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; font-size: 0.93rem; }
+.side .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; flex: none; align-self: center; }
+.side a .nm { display: flex; align-items: center; min-width: 0; }
+.d-exploring { background: var(--muted); } .d-drafted { background: var(--partial); } .d-decided { background: var(--has); }
+</style>
+
+<div class="layout">
+<div class="topbar"><span class="t">Agent Wishlist</span><button class="menu-btn" id="menu" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
+<nav class="side" id="side" aria-label="Contents">
+  <div class="brand">Agent Wishlist<small>Ardengard design workbook</small></div>
+  <div class="grp">
+    <span class="grp-label">Overview</span>
+    <a href="#top" data-sec="top">Summary</a>
+    <a href="#first" data-sec="first">Read this first</a>
+    <a href="#picks-sec" data-sec="picks-sec">Seven to start with <span class="n">7</span></a>
+    <a href="#path" data-sec="path">Path from here <span class="n">4</span></a>
+    <a href="#gaps" data-sec="gaps">Gap analysis <span class="n" id="nav-gaps"></span></a>
+  </div>
+  <div class="grp" id="nav-build">
+    <span class="grp-label">Build</span>
+    <a href="#prd" data-sec="prd">Product requirements <span class="n" id="nav-req"></span></a>
+    <a href="#plan" data-sec="plan">Build plan <span class="n" id="nav-tasks"></span></a>
+  </div>
+  <div class="grp" id="nav-areas"><span class="grp-label">Design areas</span></div>
+  <div class="grp" id="nav-themes">
+    <span class="grp-label">Idea catalog</span>
+    <a href="#ideas" data-sec="ideas">Filters and all ideas <span class="n" id="nav-total"></span></a>
+  </div>
+  <div class="grp">
+    <span class="grp-label">Record</span>
+    <a href="#log" data-sec="log">Discussion log <span class="n" id="nav-log"></span></a>
+    <a href="#sources" data-sec="sources">Sources <span class="n" id="nav-src"></span></a>
+  </div>
+</nav>
+<main class="wrap">
+  <header id="top">
+    <span class="eyebrow">Ardengard · updated <span id="updated"></span></span>
+    <h1>Agent Wishlist</h1>
+    <p class="lede">The workbook for Ardengard, our own personal bot team. Each design area collects what is decided, what is still open, and the ideas behind it, so it can become the spec when we start building. Ideas come from Grok Bot, MausBot, Hermes, OpenClaw, Muse, dots, Cue and the open-source field, rewritten in our own words.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section id="first">
+    <div class="sec-head"><h2>Read this first</h2></div>
+    <div class="first">
+      <div class="note warn">
+        <span class="label">Built to share, not for daily use</span>
+        <ul>
+          <li>Goal since 2026-11-21: build it, talk about it, and share it with your community. You may not use it every day.</li>
+          <li>That changes the main risk: from "you stop using it" (what ended an earlier bot) to "others install something you never ran".</li>
+          <li>So the rule: you run every release yourself, long enough to film the demo, before anyone else installs it. Safe defaults ship on.</li>
+        </ul>
+      </div>
+      <div class="note warn">
+        <span class="label">The AIOS priority</span>
+        <ul>
+          <li>AIOS rule since 2026-11-07: build the system before chasing any opportunity.</li>
+          <li>This counts as system work only for the AIOS integration area.</li>
+          <li>Everything else here is a side project. That is fine, as long as you call it one.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <span class="label blue">"Our own model" means our own product</span>
+        <ul>
+          <li>Our own design, name and code, running on Claude through Claude Code.</li>
+          <li>Training our own language model is not realistic for one person, and the bots would be worse for it.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <span class="label blue">Clean-room rules for borrowing ideas</span>
+        <ul>
+          <li>Ideas, features and behaviors are free to reuse. Code, docs text, artwork and names are not.</li>
+          <li>We write our spec from this page, never from their docs or source.</li>
+          <li>Never use their names: Grok, MausBot, Muse, Claw, Cue.</li>
+          <li>Depending on a permissive library (MIT, Apache) is fine with attribution. Copyleft code (GPL, AGPL) we do not read for implementation at all.</li>
+          <li>Claude has read MausBot's code. For strict clean room, implementation sessions work from this page only.</li>
+          <li>David Ondrej built SuperBot this way: he studied what Grok Bot does and wrote his own. His was a one-day demo with no security work; ours does not ship without the security area.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="picks-sec">
+    <div class="sec-head"><h2>Seven to start with</h2><p>Chosen for daily-use value to you, not for feature count.</p></div>
+    <div class="picks" id="picks"></div>
+  </section>
+
+  <section id="path">
+    <div class="sec-head"><h2>Path from here</h2><p>Each step has to earn the next one.</p></div>
+    <div class="phases">
+      <div class="phase now"><span class="step">Step 1 · now</span><h3>See MausBot running</h3><ul><li>A short look on a small server, not a long trial.</li><li>Note what works and what we would do differently.</li></ul></div>
+      <div class="phase"><span class="step">Step 2</span><h3>Fill in the design areas</h3><ul><li>Answer the open questions in each area.</li><li>A one-week Buzz check before we build on it.</li></ul></div>
+      <div class="phase"><span class="step">Step 3</span><h3>Turn areas into the spec</h3><ul><li>Each area becomes a spec chapter in our words.</li><li>Smallest core first: Buzz, one bot, one computer, Telegram doorbell, memory.</li></ul></div>
+      <div class="phase"><span class="step">Step 4</span><h3>Build, run, then share</h3><ul><li>Build in an open repo, posting milestones through /post.</li><li>Run each release yourself for the demo.</li><li>Then share with your community, labeled experimental.</li></ul></div>
+    </div>
+  </section>
+
+  <section id="prd">
+    <div class="sec-head"><h2 id="prd-title"></h2><p id="prd-status"></p></div>
+    <div class="cols" id="prd-top"></div>
+    <div class="note"><span class="label blue">Architecture</span><p id="prd-arch"></p></div>
+    <div id="prd-parts"></div>
+    <h3 class="repo-h" id="prd-req-h"></h3>
+    <div id="prd-reqs"></div>
+    <div class="cols" id="prd-bottom"></div>
+    <div id="prd-risks"></div>
+  </section>
+
+  <section id="plan">
+    <div class="sec-head"><h2 id="plan-title"></h2><p id="plan-status"></p></div>
+    <div class="note"><span class="label blue">Rules</span><ul id="plan-rules"></ul></div>
+    <div id="plan-phases" style="display:grid;gap:22px"></div>
+  </section>
+
+  <section id="gaps">
+    <div class="sec-head"><h2>Gap analysis</h2><p id="gap-intro"></p></div>
+    <div class="gap-list" id="gap-list"></div>
+    <div class="note"><span class="label blue">Confirmed strength</span><p id="gap-confirmed"></p></div>
+  </section>
+
+  <section id="areas">
+    <div class="sec-head"><h2>Design areas</h2><p>One section per part of the product. Status moves from exploring to drafted to decided as we talk it through.</p></div>
+    <div id="area-list" style="display:grid;gap:34px"></div>
+  </section>
+
+  <section id="ideas">
+    <div class="sec-head"><h2>Idea catalog</h2><p>Every idea, filterable by theme, by how far it goes, or by whether MausBot already has it.</p></div>
+    <div class="filters">
+      <div class="frow"><span class="fl">Theme</span><div class="frow" id="f-theme"></div></div>
+      <div class="frow"><span class="fl">Reach</span><div class="frow" id="f-tier"></div></div>
+      <div class="frow"><span class="fl">In MausBot</span><div class="frow" id="f-mb"></div></div>
+      <div class="frow"><span class="fl">Search</span><input id="q" type="search" placeholder="phone, memory, approval..." aria-label="Search ideas"><span class="count" id="count"></span></div>
+    </div>
+    <div id="catalog" style="display:grid;gap:28px"></div>
+  </section>
+
+  <section id="log">
+    <div class="sec-head"><h2>Discussion log</h2><p>Every question, answer and decision from our conversations, newest first. Nothing discussed lives only in chat.</p></div>
+    <div class="log" id="log-list"></div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head"><h2>Sources</h2><p>Read on 2026-11-21. Vendor claims are their own and not independently checked.</p></div>
+    <ul class="sources" id="src-list"></ul>
+  </section>
+
+  <footer>Source of truth: workbook/ideas.json, docs/discussion-log.md, docs/product/prd.json and docs/plan/plan.json in the ardengard repo. This page is generated from them by scripts/build_workbook.py.</footer>
+</main>
+</div>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById("data").textContent);
+  var PICKS = [
+    [62, "Feed bots skills first: they can do a job on day one, and your 37 existing skills come along. Watching (#6) is kept only for screen chores you cannot put in words."],
+    [47, "Your waiting questions answered in one tap from the phone. Unblocks work you already have."],
+    [34, "Autonomy you can watch grow, instead of a blanket Full access switch."],
+    [15, "The bots improve overnight, the way your lessons-learned rule asks of every session."],
+    [50, "A real job you need done, and the fairest test of computer use."],
+    [45, "Makes bots part of the AIOS rather than a side system."],
+    [18, "Keeps your own inbox out of every experiment from day one."]
+  ];
+  var SOURCES = [
+    ["Introducing Grok Bot (xAI)", "https://x.ai/news/introducing-grok-bot"],
+    ["Grok Bot vs OpenMausBot (MausBot)", "https://mausbot.com/blog/grok-bot-vs-openmausbot"],
+    ["OpenMausBot on GitHub", "https://github.com/milind-soni/OpenMausBot"],
+    ["Introducing Muse (Meta)", "https://about.fb.com/newsroom/introducing-muse-personal-ai-agent/"],
+    ["OpenAI launches dots (SiliconANGLE)", "https://siliconangle.com/2026/09/29/openai-launches-dots-always-on-ai-agents-in-chatgpt-with-their-own-cloud-computers/"],
+    ["Manus Cue: email, phone and wallet (TNW)", "https://thenextweb.com/news/manus-2-0-cue-ai-agents-email-phone-wallet"],
+    ["Hermes Agent docs", "https://hermes-agent.nousresearch.com/docs"],
+    ["OpenClaw docs", "https://docs.openclaw.ai/start/hubs"],
+    ["CopilotKit OpenBot", "https://github.com/CopilotKit/OpenBot"],
+    ["Eigent", "https://github.com/eigent-ai/eigent"],
+    ["Cua", "https://github.com/trycua/cua"],
+    ["Rerun", "https://github.com/rerun-build/rerun"],
+    ["OpenClaw vulnerabilities (Kaspersky)", "https://www.kaspersky.com/blog/openclaw-vulnerabilities-exposed/55263/"],
+    ["Tens of thousands of OpenClaw systems exposed (SiliconANGLE)", "https://siliconangle.com/2026/02/09/tens-thousands-openclaw-systems-exposed-due-misconfiguration-known-exploits/"],
+    ["OpenClaw Claw Chain vulnerabilities", "https://cybersecuritynews.com/openclaw-chain-vulnerabilities/"],
+    ["Hermes Agent advisories (GitLab)", "https://advisories.gitlab.com/pkg/pypi/hermes-agent/"],
+    ["Hermes Agent security review (NeuralTrust)", "https://neuraltrust.ai/blog/hermes-agent-security"],
+    ["OWASP Top 10 for Agentic Applications", "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"],
+    ["mem0", "https://github.com/mem0ai/mem0"],
+    ["Graphiti", "https://github.com/getzep/graphiti"],
+    ["Cognee", "https://github.com/topoteretes/cognee"],
+    ["Letta", "https://github.com/letta-ai/letta"],
+    ["Supermemory", "https://github.com/supermemoryai/supermemory"]
+  ];
+  var TIER = { parity: "Match Grok Bot", beyond: "Go past it", moonshot: "Moonshot" };
+  var MB = { has: "MausBot has it", partial: "MausBot partly", missing: "MausBot lacks it" };
+  var EFF = { S: "small", M: "medium", L: "large" };
+  var byId = {}; D.ideas.forEach(function (i) { byId[i.id] = i; });
+  var state = { theme: "all", tier: "all", mb: "all", q: "" };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function tag(cls, text) { return el("span", "tag " + cls, text); }
+  function ideaLink(id) {
+    var a = el("a", null, "#" + id + " " + (byId[id] ? byId[id].title : "")); a.href = "#idea-" + id;
+    a.addEventListener("click", function () { if (!document.getElementById("idea-" + id)) resetFilters(); });
+    return a;
+  }
+  function list(items, cls) { var u = el("ul", cls); items.forEach(function (t) { u.appendChild(el("li", null, t)); }); return u; }
+
+  document.getElementById("updated").textContent = D.updated;
+  var counts = { has: 0, partial: 0, missing: 0 };
+  D.ideas.forEach(function (i) { counts[i.mausbot]++; });
+  var openQ = 0; D.areas.forEach(function (a) { openQ += a.open.length; });
+  var stats = document.getElementById("stats");
+  [[D.areas.length, "design areas"], [openQ, "open questions"], [D.ideas.length, "ideas"], [counts.missing, "MausBot lacks"], [D.log.length, "log entries"]].forEach(function (s) {
+    var d = el("div", "stat"); d.appendChild(el("b", null, String(s[0]))); d.appendChild(document.createTextNode(s[1])); stats.appendChild(d);
+  });
+
+  var picks = document.getElementById("picks");
+  PICKS.forEach(function (p) {
+    var i = byId[p[0]]; if (!i) return;
+    var c = el("div", "pick");
+    c.appendChild(el("span", "num", "#" + i.id)); c.appendChild(el("h3", null, i.title)); c.appendChild(el("p", null, p[1]));
+    picks.appendChild(c);
+  });
+
+  /* PRD and build plan */
+  var P = D.prd, B = D.plan;
+  function box(cls, label, items) { var b = el("div", "box " + cls); b.appendChild(el("span", "label", label + " (" + items.length + ")")); b.appendChild(list(items)); return b; }
+  document.getElementById("prd-title").textContent = "Product requirements";
+  document.getElementById("prd-status").textContent = P.status + " · " + P.working_name + " · updated " + P.updated;
+  var top = document.getElementById("prd-top");
+  top.appendChild(box("opn", "Problem", P.problem));
+  top.appendChild(box("prop", "Users", P.users.map(function (u) { return u.who + ": " + u.need; })));
+  top.appendChild(box("dec", "Goals for version 1", P.goals));
+  top.appendChild(box("opn", "Not in version 1", P.non_goals));
+  document.getElementById("prd-arch").textContent = P.architecture.summary;
+  document.getElementById("prd-parts").appendChild(table(["Part", "Role", "Source", "Who builds it"], P.architecture.parts.map(function (x) {
+    return [el("span", "rn", x.part), x.role, x.source, el("span", x.ours ? "lic-q" : "lic-ok", x.ours ? "We build" : "Existing")];
+  })));
+  document.getElementById("prd-req-h").textContent = "Requirements (" + P.requirements.length + ")";
+  document.getElementById("nav-req").textContent = String(P.requirements.length);
+  document.getElementById("prd-reqs").appendChild(table(["ID", "Area", "Requirement"], P.requirements.map(function (r) {
+    var a = el("a", "rn", areaNameOf(r.area)); a.href = "#area-" + r.area; return [el("span", "rn", r.id), a, r.text];
+  })));
+  var bot = document.getElementById("prd-bottom");
+  bot.appendChild(box("dec", "Success measures", P.metrics));
+  bot.appendChild(box("prop", "Non-functional", P.nonfunctional));
+  bot.appendChild(box("opn", "Open questions", P.open_questions));
+  document.getElementById("prd-risks").appendChild(table(["Risk", "Plan"], P.risks.map(function (r) { return [r.risk, r.plan]; })));
+  document.getElementById("plan-title").textContent = "Build plan";
+  document.getElementById("plan-status").textContent = B.status + " · " + B.phases.length + " phases · updated " + B.updated;
+  var pr = document.getElementById("plan-rules"); B.rules.forEach(function (r) { pr.appendChild(el("li", null, r)); });
+  var nTasks = 0, phHost = document.getElementById("plan-phases"), navB = document.getElementById("nav-build");
+  B.phases.forEach(function (ph) {
+    nTasks += ph.tasks.length;
+    var s = el("div", "area"); s.id = "phase-" + ph.id;
+    var h = el("div", "area-head"); h.appendChild(el("h3", null, ph.id + " · " + ph.name)); h.appendChild(el("span", "pill s-exploring", ph.tasks.length + " tasks")); s.appendChild(h);
+    s.appendChild(el("p", "sum", ph.goal));
+    s.appendChild(table(["Task", "What", "Done when", "Requirements"], ph.tasks.map(function (t) { return [el("span", "rn", t.id), t.task, t.done, t.req.join(", ")]; })));
+    var ex = el("p", "from"); ex.appendChild(el("b", null, "Exit check: ")); ex.appendChild(document.createTextNode(ph.exit)); s.appendChild(ex);
+    phHost.appendChild(s);
+    var a = el("a", "sub"); a.href = "#phase-" + ph.id; a.dataset.sec = "phase-" + ph.id; a.appendChild(document.createTextNode(ph.id + " " + ph.name)); a.appendChild(el("span", "n", String(ph.tasks.length))); navB.appendChild(a);
+  });
+  document.getElementById("nav-tasks").textContent = String(nTasks);
+  function areaNameOf(k) { for (var i = 0; i < D.areas.length; i++) if (D.areas[i].key === k) return D.areas[i].name; return k; }
+
+  /* Gap analysis */
+  var G = D.gaps, areaName = {};
+  D.areas.forEach(function (a) { areaName[a.key] = a.name; });
+  if (G) {
+    document.getElementById("gap-intro").textContent = G.intro;
+    document.getElementById("gap-confirmed").textContent = G.confirmed;
+    document.getElementById("nav-gaps").textContent = String(G.items.length);
+    var gl = document.getElementById("gap-list");
+    G.items.forEach(function (g) {
+      var c = el("div", "gap"); c.appendChild(el("h3", null, g.gap));
+      c.appendChild(el("p", null, g.why)); c.appendChild(el("p", "src", "Source: " + g.source));
+      var f = el("p", "fix"); f.appendChild(document.createTextNode(g.fix + " ")); var a = el("a", null, "Go to " + (areaName[g.area] || g.area)); a.href = "#area-" + g.area; f.appendChild(a); c.appendChild(f);
+      gl.appendChild(c);
+    });
+  }
+
+  /* Design areas */
+  function table(cols, rows) {
+    var w = el("div", "tbl-wrap"), t = el("table"), hr = el("tr");
+    cols.forEach(function (c) { hr.appendChild(el("th", null, c)); });
+    var th = el("thead"); th.appendChild(hr); t.appendChild(th);
+    var tb = el("tbody"); rows.forEach(function (r) { var tr = el("tr"); r.forEach(function (c) { tr.appendChild(c instanceof Node ? (function () { var td = el("td"); td.appendChild(c); return td; })() : el("td", null, c)); }); tb.appendChild(tr); });
+    t.appendChild(tb); w.appendChild(t); return w;
+  }
+  function memoryDetail() {
+    var M = D.memory, d = el("div", "detail");
+    var st = el("div", "note warn"); st.appendChild(el("span", "label", "Stance")); st.appendChild(el("p", null, M.stance)); d.appendChild(st);
+    d.appendChild(el("h3", null, "Five kinds of memory"));
+    d.appendChild(table(["Kind", "Holds", "Example", "Kept in", "Idea from"], M.layers.map(function (l) { var b = el("span", "rn", l.name); return [b, l.holds, l.example, l.kept, l.from]; })));
+    d.appendChild(el("h3", null, "How a memory gets written"));
+    var ol = el("ol", "steps"); M.pipeline.forEach(function (s) { ol.appendChild(el("li", null, s)); }); d.appendChild(ol);
+    var sk = el("div", "note"); sk.appendChild(el("span", "label blue", "Recommended build order")); sk.appendChild(list(M.stack)); d.appendChild(sk);
+    d.appendChild(el("h3", null, "Memory repos worth knowing (" + M.repos.length + ")"));
+    d.appendChild(table(["Repo", "Stars", "License", "What it is", "What to take", "Verdict"], M.repos.map(function (r) {
+      var a = el("a", "rn", r.repo); a.href = "https://github.com/" + r.repo;
+      var lc = /AGPL|GPL/.test(r.license) ? "lic-no" : (r.license === "Unclear" ? "lic-q" : "lic-ok");
+      return [a, r.stars.toLocaleString("en-US"), el("span", lc, r.license), r.what, r.take, r.verdict];
+    })));
+    d.appendChild(el("p", "from", "Stars and licenses from the GitHub API, 2026-11-21. Red license: copyleft, ideas only. Amber: license unclear."));
+    return d;
+  }
+  function securityDetail() {
+    var S = D.security, d = el("div", "detail");
+    var st = el("div", "note warn"); st.appendChild(el("span", "label", "Stance")); st.appendChild(el("p", null, S.stance)); d.appendChild(st);
+    var h1 = el("h3", null, "Lessons from other projects' code (" + S.code_lessons.length + ")"); h1.id = "sec-code"; h1.className = "sub-anchor"; d.appendChild(h1);
+    d.appendChild(el("p", "from", S.code_intro));
+    var cl = el("div", "threats");
+    S.code_lessons.forEach(function (x) {
+      var c = el("div", "threat code");
+      c.appendChild(el("h3", null, x.lesson));
+      c.appendChild(el("span", "k", "Seen in")); c.appendChild(el("p", null, x.seen));
+      var r = el("p", "rule"); r.appendChild(el("b", null, "Our rule: ")); r.appendChild(document.createTextNode(x.rule)); c.appendChild(r);
+      c.appendChild(tag("t-parity", "OWASP " + x.owasp + " " + (S.owasp[x.owasp] || "")));
+      cl.appendChild(c);
+    });
+    d.appendChild(cl);
+    var h2 = el("h3", null, "Threats while the bots run (" + S.threats.length + ")"); h2.id = "sec-threats"; h2.className = "sub-anchor"; d.appendChild(h2);
+    var th = el("div", "threats");
+    S.threats.forEach(function (x) {
+      var c = el("div", "threat");
+      c.appendChild(el("h3", null, x.threat));
+      c.appendChild(el("span", "k", "Example")); c.appendChild(el("p", null, x.example));
+      c.appendChild(el("span", "k", "Defense")); c.appendChild(el("p", null, x.defense));
+      var l = el("div", "links"); x.ideas.forEach(function (id) { l.appendChild(ideaLink(id)); }); c.appendChild(l);
+      th.appendChild(c);
+    });
+    d.appendChild(th);
+    var rb = el("div", "note"); rb.id = "sec-rules-box"; rb.appendChild(el("span", "label blue", "Design rules for our repo (" + S.rules.length + ")")); rb.appendChild(list(S.rules)); d.appendChild(rb);
+    return d;
+  }
+  var STATUS = { exploring: "Exploring", drafted: "Drafted", decided: "Decided" };
+  var areaHost = document.getElementById("area-list"), navAreas = document.getElementById("nav-areas");
+  D.areas.forEach(function (a) {
+    var s = el("div", "area"); s.id = "area-" + a.key;
+    var h = el("div", "area-head"); h.appendChild(el("h3", null, a.name)); h.appendChild(el("span", "pill s-" + a.status, STATUS[a.status])); s.appendChild(h);
+    s.appendChild(el("p", "sum", a.summary));
+    var cols = el("div", "cols");
+    var dec = el("div", "box dec"); dec.appendChild(el("span", "label", "Decided (" + a.decided.length + ")"));
+    dec.appendChild(a.decided.length ? list(a.decided) : el("p", "none", "Nothing decided yet."));
+    var op = el("div", "box opn"); op.appendChild(el("span", "label", "Open questions (" + a.open.length + ")"));
+    op.appendChild(a.open.length ? list(a.open) : el("p", "none", "No open questions."));
+    cols.appendChild(dec);
+    if (a.proposed && a.proposed.length) { var pr = el("div", "box prop"); pr.appendChild(el("span", "label", "Proposed, not decided (" + a.proposed.length + ")")); pr.appendChild(list(a.proposed)); cols.appendChild(pr); }
+    cols.appendChild(op); s.appendChild(cols);
+    if (a.facts && a.facts.length) {
+      var fb = el("div", "note"); fb.appendChild(el("span", "label blue", "What we found")); fb.appendChild(list(a.facts)); s.appendChild(fb);
+    }
+    if (a.mockup) {
+      var mb = el("div", "note"); mb.appendChild(el("span", "label blue", "UI mockup"));
+      mb.appendChild(el("p", null, a.mockup)); s.appendChild(mb);
+    }
+    if (a.channels && a.channels.length) {
+      s.appendChild(el("h3", "repo-h", "Chat channels, in order (" + a.channels.length + ")"));
+      var RISK = { low: "lic-ok", medium: "lic-q", high: "lic-no" };
+      s.appendChild(table(["Channel", "Verdict", "Risk", "Why", "If we do it"], a.channels.map(function (c) {
+        return [el("span", "rn", c.channel), el("span", RISK[c.risk], c.verdict), el("span", RISK[c.risk], c.risk), c.why, c.must];
+      })));
+    }
+    if (a.repos && a.repos.length) {
+      s.appendChild(el("h3", "repo-h", "Reference repos to study (" + a.repos.length + ")"));
+      s.appendChild(table(["Repo", "Stars", "License", "What it is", "What to study"], a.repos.map(function (r) {
+        var link = el("a", "rn", r.repo); link.href = "https://github.com/" + r.repo;
+        var lc = r.copyleft ? "lic-no" : (/^(NOASSERTION|none)$/.test(r.license) ? "lic-q" : "lic-ok");
+        var lt = r.copyleft ? r.license + ", ideas only" : (/^(NOASSERTION|none)$/.test(r.license) ? "Custom, check first" : r.license);
+        return [link, r.stars.toLocaleString("en-US"), el("span", lc, lt), r.what, r.study];
+      })));
+    }
+    if (a.detail === "memory") s.appendChild(memoryDetail());
+    if (a.detail === "security") s.appendChild(securityDetail());
+    var il = el("div", "idea-links"); il.appendChild(el("span", "k", "Ideas"));
+    a.ideas.forEach(function (id) { il.appendChild(ideaLink(id)); }); s.appendChild(il);
+    areaHost.appendChild(s);
+    var link = el("a"); link.href = "#area-" + a.key; link.dataset.sec = "area-" + a.key;
+    var nm = el("span", "nm"); nm.appendChild(el("span", "dot d-" + a.status)); nm.appendChild(document.createTextNode(a.name));
+    link.appendChild(nm); link.appendChild(el("span", "n", String(a.open.length) + "?")); link.title = STATUS[a.status] + ", " + a.open.length + " open questions";
+    navAreas.appendChild(link);
+  });
+
+  /* Idea catalog */
+  function chips(hostId, key, options) {
+    var host = document.getElementById(hostId);
+    options.forEach(function (o) {
+      var b = el("button", "chip", o[1]); b.type = "button"; b.dataset.v = o[0];
+      b.setAttribute("aria-pressed", String(state[key] === o[0]));
+      b.addEventListener("click", function () {
+        state[key] = o[0];
+        host.querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.v === o[0])); });
+        render();
+      });
+      host.appendChild(b);
+    });
+  }
+  chips("f-theme", "theme", [["all", "All"]].concat(D.themes.map(function (t) { return [t.key, t.name]; })));
+  chips("f-tier", "tier", [["all", "All"], ["parity", TIER.parity], ["beyond", TIER.beyond], ["moonshot", TIER.moonshot]]);
+  chips("f-mb", "mb", [["all", "All"], ["missing", "Lacks it"], ["partial", "Partly"], ["has", "Has it"]]);
+  document.getElementById("q").addEventListener("input", function (e) { state.q = e.target.value.trim().toLowerCase(); render(); });
+  function resetFilters() {
+    state.theme = "all"; state.tier = "all"; state.mb = "all"; state.q = "";
+    document.getElementById("q").value = "";
+    document.querySelectorAll(".filters .chip").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.v === "all")); });
+    render();
+  }
+  function card(i) {
+    var c = el("article", "card"); c.id = "idea-" + i.id;
+    var top = el("div", "top"); top.appendChild(el("h3", null, i.title)); top.appendChild(el("span", "id", "#" + i.id)); c.appendChild(top);
+    var t = el("div", "tags");
+    t.appendChild(tag("t-" + i.tier, TIER[i.tier])); t.appendChild(tag("t-" + i.mausbot, MB[i.mausbot])); t.appendChild(tag("t-effort", EFF[i.effort] + " build"));
+    c.appendChild(t);
+    c.appendChild(el("p", "what", i.what));
+    var w = el("p", "why"); w.appendChild(el("b", null, "For you: ")); w.appendChild(document.createTextNode(i.why)); c.appendChild(w);
+    c.appendChild(el("p", "from", "From: " + i.from.join(", ")));
+    return c;
+  }
+  function render() {
+    var host = document.getElementById("catalog"); host.textContent = "";
+    var shown = 0;
+    D.themes.forEach(function (th) {
+      if (state.theme !== "all" && state.theme !== th.key) return;
+      var items = D.ideas.filter(function (i) {
+        if (i.theme !== th.key) return false;
+        if (state.tier !== "all" && i.tier !== state.tier) return false;
+        if (state.mb !== "all" && i.mausbot !== state.mb) return false;
+        if (state.q) { var hay = (i.title + " " + i.what + " " + i.why + " " + i.from.join(" ")).toLowerCase(); if (hay.indexOf(state.q) < 0) return false; }
+        return true;
+      });
+      if (!items.length) return;
+      shown += items.length;
+      var blk = el("div", "theme-block"); blk.id = "theme-" + th.key;
+      blk.appendChild(el("h3", null, th.name + " (" + items.length + ")"));
+      blk.appendChild(el("p", null, th.blurb));
+      var g = el("div", "grid"); items.forEach(function (i) { g.appendChild(card(i)); }); blk.appendChild(g);
+      host.appendChild(blk);
+    });
+    if (!shown) host.appendChild(el("p", "empty", "No ideas match these filters. Clear the search or pick All."));
+    document.getElementById("count").textContent = shown + " of " + D.ideas.length + " shown";
+    observe();
+  }
+
+  /* Discussion log, newest first */
+  var logHost = document.getElementById("log-list");
+  D.log.slice().reverse().forEach(function (e) {
+    var c = el("div", "entry"); c.appendChild(el("span", "when", e.when)); c.appendChild(list(e.items)); logHost.appendChild(c);
+  });
+  document.getElementById("nav-log").textContent = String(D.log.length);
+
+  var src = document.getElementById("src-list");
+  SOURCES.forEach(function (s) { var li = el("li"), a = el("a", null, s[0]); a.href = s[1]; li.appendChild(a); src.appendChild(li); });
+  document.getElementById("nav-src").textContent = String(SOURCES.length);
+
+  /* Sidebar */
+  var navThemes = document.getElementById("nav-themes");
+  document.getElementById("nav-total").textContent = String(D.ideas.length);
+  D.themes.forEach(function (th) {
+    var n = D.ideas.filter(function (i) { return i.theme === th.key; }).length;
+    var a = el("a", "sub"); a.href = "#theme-" + th.key; a.dataset.sec = "theme-" + th.key;
+    a.appendChild(document.createTextNode(th.name)); a.appendChild(el("span", "n", String(n)));
+    a.addEventListener("click", function () { if (!document.getElementById("theme-" + th.key)) resetFilters(); });
+    navThemes.appendChild(a);
+  });
+  var side = document.getElementById("side"), menu = document.getElementById("menu");
+  function setOpen(o) { side.classList.toggle("open", o); menu.setAttribute("aria-expanded", String(o)); }
+  menu.addEventListener("click", function () { setOpen(!side.classList.contains("open")); });
+  side.addEventListener("click", function (e) { if (e.target.closest("a")) setOpen(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
+  document.addEventListener("click", function (e) { if (side.classList.contains("open") && !side.contains(e.target) && e.target !== menu) setOpen(false); });
+  var links = Array.prototype.slice.call(side.querySelectorAll("a[data-sec]"));
+  var io = null;
+  function mark(id) {
+    links.forEach(function (a) { a.classList.toggle("active", a.dataset.sec === id); });
+    var act = side.querySelector("a.active");
+    if (act && act.scrollIntoView && side.scrollHeight > side.clientHeight) act.scrollIntoView({ block: "nearest" });
+  }
+  function observe() {
+    if (!("IntersectionObserver" in window)) return;
+    if (io) io.disconnect();
+    var visible = {};
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { visible[en.target.id] = en.isIntersecting ? en.boundingClientRect.top : null; });
+      var best = null, bestTop = Infinity;
+      links.forEach(function (a) { var t = visible[a.dataset.sec]; if (t != null && Math.abs(t) < bestTop) { best = a.dataset.sec; bestTop = Math.abs(t); } });
+      if (best) mark(best);
+    }, { rootMargin: "0px 0px -60% 0px", threshold: 0 });
+    links.forEach(function (a) { var s = document.getElementById(a.dataset.sec); if (s) io.observe(s); });
+  }
+  render();
+  mark("top");
+})();
+</script>

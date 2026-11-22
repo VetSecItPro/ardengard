@@ -1,0 +1,40 @@
+PASS Embrigard|0|404|404|404|404  .com-free
+     Wyrmhold|4|404|404|200|404
+     Eldmere|1|404|404|200|404
+PASS Vaelgard|0|404|404|200|404
+PASS Kaelhold|0|404|404|200|404
+PASS Aldrmark|0|404|404|404|404  .com-free
+PASS Vorhold|0|404|404|404|404  .com-free
+PASS Ironwyck|0|404|404|404|404  .com-free
+     Vaelmoor|2|404|404|200|404
+PASS Kaelspire|0|404|404|404|404  .com-free
+PASS Eldhollow|0|404|404|200|404
+     Wardhelm|1|404|404|200|404
+     Duskhold|7|404|404|200|404
+PASS Brannmere|0|404|404|404|404  .com-free
+PASS Halvgard|0|404|404|404|404  .com-free
+PASS Sylgard|0|404|404|200|404
+PASS Galdmere|0|404|404|200|404
+PASS Fennhold|0|404|404|404|404  .com-free
+PASS Corrigard|0|404|404|404|404  .com-free
+PASS Vaskhold|0|404|404|404|404  .com-free
+PASS Ruskmere|0|404|404|404|404  .com-free
+PASS Ardengard|0|404|404|404|404  .com-free
+PASS Varnhold|0|404|404|200|404
+PASS Eskmere|0|404|404|200|404
+PASS Thalgard|0|404|404|404|404  .com-free
+PASS Brynhold|0|404|404|404|404  .com-free
+PASS Caldmere|0|404|404|200|404
+PASS Yrsmere|0|404|404|404|404  .com-free
+     Emberhold|32|404|404|200|404
+PASS Thornwyck|0|404|404|404|404  .com-free
+     Ashmoor|1|404|404|200|404
+PASS Frostgard|0|404|404|200|404
+PASS Dunhallow|0|404|404|200|404
+PASS Oskmere|0|404|404|404|404  .com-free
+     Velgarde|1|404|404|200|404
+PASS Draegard|0|404|404|404|404  .com-free
+PASS Hrothgard|0|404|404|404|404  .com-free
+PASS Ulmere|0|404|404|200|404
+PASS Skaldhold|0|404|404|404|404  .com-free
+PASS Gravenmoor|0|404|404|404|404  .com-free

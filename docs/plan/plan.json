@@ -1,0 +1,393 @@
+{
+  "title": "Ardengard version 1: build plan",
+  "status": "Draft for approval",
+  "updated": "2026-11-22",
+  "rules": [
+    "Nothing in a phase starts until the PRD is approved and the previous phase's exit check passes.",
+    "Every task ships with its tests; every phase ends with /smoketest and a demo you can film.",
+    "One work block is one branch and one PR through /gh-ship.",
+    "Each phase updates the discussion log and the scorecard."
+  ],
+  "phases": [
+    {
+      "id": "P0",
+      "name": "Spikes: prove the unknowns",
+      "goal": "Answer the questions that could change the design before any real code.",
+      "exit": "Each spike has a written result in the discussion log and the PRD is updated.",
+      "tasks": [
+        {
+          "id": "P0.1",
+          "task": "Run the Buzz Compose stack (pinned release) on a test server and record memory, CPU and disk at idle and with one bot.",
+          "done": "Numbers recorded; minimum server size set in the PRD.",
+          "req": [
+            "R1"
+          ]
+        },
+        {
+          "id": "P0.2",
+          "task": "Connect Claude Code to Buzz with buzz-acp and claude-agent-acp; one bot answers an @mention in a thread.",
+          "done": "A screen recording of the reply; setup steps written down.",
+          "req": [
+            "R2"
+          ]
+        },
+        {
+          "id": "P0.3",
+          "task": "Find out what happens to Claude Code permission requests under buzz-acp (shown, auto-denied or auto-approved).",
+          "done": "Decision recorded: approvals flow through Buzz, Telegram, or our gatekeeper hook.",
+          "req": [
+            "R7"
+          ]
+        },
+        {
+          "id": "P0.4",
+          "task": "Log Claude Code in on a headless server and measure how bot usage counts against your plan.",
+          "done": "Decision recorded: your subscription with caps, or a separate account or API key.",
+          "req": [
+            "R16"
+          ]
+        },
+        {
+          "id": "P0.5",
+          "task": "Drive a Cua desktop container from Claude Code over MCP: open a site, read a page, take a screenshot.",
+          "done": "Working example committed; resource cost noted.",
+          "req": [
+            "R11"
+          ]
+        },
+        {
+          "id": "P0.6",
+          "task": "Drive a browser from Claude Code with Browser Harness inside the bot's desktop container; run one real website task and compare speed and token use with Cua screenshots.",
+          "done": "Decision recorded: Browser Harness, Cua, or both, for website work.",
+          "req": [
+            "R11"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "name": "Foundation",
+      "goal": "A new repo and a safe one-command stack with nothing yet clever in it.",
+      "exit": "Fresh Ubuntu 24.04 server to running stack with one command, reachable only over Tailscale, backups running.",
+      "tasks": [
+        {
+          "id": "P1.1",
+          "task": "Pick the server for development; create the ardengard repo under a GitHub organization (ardengard-dev or ardengardhq; github.com/ArdenGard is a personal account) with /repo-bootstrap (CI gate, tests, Apache 2.0 LICENSE, SECURITY.md, CHANGELOG); register ardengard.dev.",
+          "done": "Repo public or private as decided; CI green on an empty test.",
+          "req": [
+            "R18"
+          ]
+        },
+        {
+          "id": "P1.2",
+          "task": "Write the Compose stack: Buzz relay pinned by digest, Postgres, Redis, MinIO, Tailscale sidecar, our bot service placeholder container.",
+          "done": "docker compose up works; a test proves no port listens publicly.",
+          "req": [
+            "R1"
+          ]
+        },
+        {
+          "id": "P1.3",
+          "task": "Add the startup guard that refuses a public address and the file-permission check (0600 and 0700).",
+          "done": "Tests fail on a public bind and on a readable secret file.",
+          "req": [
+            "R1",
+            "R8"
+          ]
+        },
+        {
+          "id": "P1.4",
+          "task": "Add nightly encrypted backups (restic for files, Postgres dump, SQLite with Litestream) and a restore command.",
+          "done": "A restore onto a clean server is tested and passes.",
+          "req": [
+            "R17"
+          ]
+        },
+        {
+          "id": "P1.5",
+          "task": "Add update with automatic backup and rollback on failed health check.",
+          "done": "A deliberately broken update rolls back by itself.",
+          "req": [
+            "R17"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "First bot",
+      "goal": "One Chief of Staff bot that lives in Buzz, defined in git, safe by default.",
+      "exit": "You message the bot in Buzz, it answers, and every action it attempts asks first.",
+      "tasks": [
+        {
+          "id": "P2.1",
+          "task": "Define the bot folder format (instructions, skills, tools, model, permissions) and the Chief of Staff bot.",
+          "done": "Format documented; the bot loads from its folder.",
+          "req": [
+            "R3"
+          ]
+        },
+        {
+          "id": "P2.2",
+          "task": "Wire the bot into Buzz through buzz-acp with owner-only answers and its own key.",
+          "done": "Bot answers mentions, threads and DMs; strangers are ignored (tested).",
+          "req": [
+            "R2"
+          ]
+        },
+        {
+          "id": "P2.3",
+          "task": "Load skill files in the Agent Skills format; start with two of your existing skills.",
+          "done": "The bot uses a skill on request; skill tests pass.",
+          "req": [
+            "R4"
+          ]
+        },
+        {
+          "id": "P2.4",
+          "task": "Add bot tests and one-command rollback to the last good version.",
+          "done": "A bad edit fails its tests and is not deployed; rollback works.",
+          "req": [
+            "R3"
+          ]
+        },
+        {
+          "id": "P2.5",
+          "task": "Start the value log: estimate before, review and fix time after, used without rework yes or no.",
+          "done": "Every job produces a value record.",
+          "req": [
+            "R15"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "Gatekeeper and doorbell",
+      "goal": "Approvals, limits and the phone doorbell, before bots can do anything real.",
+      "exit": "Red-team tests show no action runs without its approval, and you can approve from Telegram.",
+      "tasks": [
+        {
+          "id": "P3.1",
+          "task": "Build the gatekeeper: per-bot allow lists, the never-delegate list, read-only default, Ask on everything.",
+          "done": "Tests try each action type without approval and all are blocked.",
+          "req": [
+            "R7"
+          ]
+        },
+        {
+          "id": "P3.2",
+          "task": "Untrusted-content quarantine: a turn that read web, email or bot content loses send and settings rights.",
+          "done": "A prompt-injection test page cannot make the bot send anything.",
+          "req": [
+            "R7"
+          ]
+        },
+        {
+          "id": "P3.3",
+          "task": "Secrets broker: logins filled at use time, never in context, transcripts or logs.",
+          "done": "A test searches all logs and transcripts for the secret and finds none.",
+          "req": [
+            "R8"
+          ]
+        },
+        {
+          "id": "P3.4",
+          "task": "Pause all, per-bot daily caps on usage and messages, and the one-writer rule per task.",
+          "done": "Pause stops a running job within seconds; caps trip in tests.",
+          "req": [
+            "R16",
+            "R9"
+          ]
+        },
+        {
+          "id": "P3.5",
+          "task": "Telegram doorbell: owner-only bot with approve and deny buttons and the content rule.",
+          "done": "An approval from the phone unblocks a job; a test confirms no sensitive fields are sent.",
+          "req": [
+            "R10"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "Memory and context",
+      "goal": "Bots that remember correctly and see only what they need.",
+      "exit": "A bot remembers a fact across days, shows where it came from, and forgets it on request.",
+      "tasks": [
+        {
+          "id": "P4.1",
+          "task": "Memory server (MCP) over markdown fact files with front matter and SQLite full-text search.",
+          "done": "Read, write, search and forget work through MCP; files are readable by you.",
+          "req": [
+            "R5"
+          ]
+        },
+        {
+          "id": "P4.2",
+          "task": "Write pipeline: add, update, delete or skip, with history; source, date, scope and expiry on every fact.",
+          "done": "A contradicting fact updates the old one instead of duplicating it (tested).",
+          "req": [
+            "R5"
+          ]
+        },
+        {
+          "id": "P4.3",
+          "task": "Unverified flag for facts from untrusted sources; they cannot change instructions or permissions.",
+          "done": "A poisoned-memory test fails to change bot behavior.",
+          "req": [
+            "R5",
+            "R7"
+          ]
+        },
+        {
+          "id": "P4.4",
+          "task": "Context recipe per bot: core profile, task, retrieved facts, trimmed tools; handoff note and fresh restart for long sessions.",
+          "done": "Token use per turn measured before and after; quality holds on benchmark jobs.",
+          "req": [
+            "R6"
+          ]
+        },
+        {
+          "id": "P4.5",
+          "task": "Nightly tidy: merge duplicates, expire stale facts, propose deletions for approval.",
+          "done": "Nightly report lists changes; nothing deleted without approval.",
+          "req": [
+            "R5"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "Computer and long jobs",
+      "goal": "A Researcher bot that works through websites on its own desktop, for hours if needed.",
+      "exit": "The prospect-list benchmark job runs overnight, survives a restart, and finishes.",
+      "tasks": [
+        {
+          "id": "P5.1",
+          "task": "Add the Researcher bot with a shared Cua desktop and browser; you can watch and take over.",
+          "done": "The bot completes a multi-page website task with screenshots in the thread.",
+          "req": [
+            "R11"
+          ]
+        },
+        {
+          "id": "P5.2",
+          "task": "Job runner with progress file, retries, resume after restart and a 20-minute stall alert.",
+          "done": "Killing the server mid-job and restarting resumes the job.",
+          "req": [
+            "R12"
+          ]
+        },
+        {
+          "id": "P5.3",
+          "task": "Reviewer step: a separate pass checks output before anything goes to a person.",
+          "done": "Incomplete output is sent back, not delivered (tested).",
+          "req": [
+            "R13"
+          ]
+        },
+        {
+          "id": "P5.4",
+          "task": "Writer bot and the one-writer handoff from Researcher to Writer.",
+          "done": "A two-bot job finishes with a single writer.",
+          "req": [
+            "R9"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6",
+      "name": "Observe and harden",
+      "goal": "See everything the bots do, and attack it before anyone else does.",
+      "exit": "Traces for every job, a clean /sec-ship, a passing /redteam, and a benchmark scorecard.",
+      "tasks": [
+        {
+          "id": "P6.1",
+          "task": "OpenTelemetry GenAI traces for every step, sent to the chosen self-hosted viewer; cost and time per job.",
+          "done": "Any job can be opened step by step.",
+          "req": [
+            "R14"
+          ]
+        },
+        {
+          "id": "P6.2",
+          "task": "Benchmark suite: 5 standing jobs rerun after every change, with the value log.",
+          "done": "Benchmark report generated per release.",
+          "req": [
+            "R15"
+          ]
+        },
+        {
+          "id": "P6.3",
+          "task": "Red team: prompt injection, tool misuse, memory poisoning, side doors around approvals (promptfoo, garak, /redteam).",
+          "done": "Every finding fixed or recorded; zero approval bypasses.",
+          "req": [
+            "R7",
+            "R13"
+          ]
+        },
+        {
+          "id": "P6.4",
+          "task": "/sec-ship full pass; pin and scan every dependency, image, MCP server and skill.",
+          "done": "No open high or critical findings.",
+          "req": [
+            "R18"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7",
+      "name": "Release to the community",
+      "goal": "Something a newcomer can install safely, and the story of building it.",
+      "exit": "A newcomer installs it from the docs and finishes a first job in under an hour, and release 1 is published.",
+      "tasks": [
+        {
+          "id": "P7.1",
+          "task": "First-run setup: creates one safe example bot and explains each permission it asks for.",
+          "done": "A clean install reaches a working example bot with no manual edits.",
+          "req": [
+            "R18"
+          ]
+        },
+        {
+          "id": "P7.2",
+          "task": "Docs site for people who have never run a server; safe defaults and risks explained plainly.",
+          "done": "A newcomer test run under 60 minutes.",
+          "req": [
+            "R18"
+          ]
+        },
+        {
+          "id": "P7.3",
+          "task": "Signed release with changelog; the install refuses versions with known advisories.",
+          "done": "Release 1 published and verified from a clean machine.",
+          "req": [
+            "R18"
+          ]
+        },
+        {
+          "id": "P7.4",
+          "task": "You run release 1 yourself long enough to film the demo.",
+          "done": "Demo recorded; problems found are fixed before sharing.",
+          "req": [
+            "R15"
+          ]
+        },
+        {
+          "id": "P7.5",
+          "task": "Public scorecard and build-log posts drafted through /post for your approval.",
+          "done": "Scorecard page live; posts in Desk for approval.",
+          "req": [
+            "R15"
+          ]
+        }
+      ]
+    }
+  ]
+}

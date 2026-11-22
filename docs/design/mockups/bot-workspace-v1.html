@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bot Workspace Mockup v1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+/* Layout: Slack-style four columns (rail, sidebar, thread, bot computer panel). Example data only. */
+:root {
+  --bg: #f3f5f9; --surface: #ffffff; --side: #1d2433; --side-2: #262f42; --side-fg: #d7deea; --side-muted: #8c97ab;
+  --ink: #18202e; --muted: #5d687a; --line: #d9dfe8; --accent: #3a46c9; --accent-soft: #e5e7fc;
+  --ok: #1d7a4a; --ok-bg: #ddf3e6; --warn: #9a5b00; --warn-bg: #fbedd5; --bad: #b42c3c; --bad-bg: #fbe1e4;
+  --display: "Space Grotesk", system-ui, sans-serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #12161e; --surface: #1a202b; --side: #0d1118; --side-2: #1a2130; --side-fg: #d7deea; --side-muted: #7f8aa0;
+  --ink: #e6eaf2; --muted: #9aa5b8; --line: #2c3544; --accent: #9aa3ff; --accent-soft: #262b52;
+  --ok: #6fd59c; --ok-bg: #17352a; --warn: #f0b35a; --warn-bg: #3a2c15; --bad: #ff8a96; --bad-bg: #3d1d24; color-scheme: dark; } }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app { display: grid; grid-template-columns: 60px 250px minmax(0, 1fr) 360px; height: 100vh; }
+.rail { background: var(--side); display: grid; align-content: start; justify-items: center; gap: 12px; padding: 14px 0; }
+.ws { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font: 700 15px var(--display); background: var(--accent); color: #fff; }
+.ws.alt { background: var(--side-2); color: var(--side-fg); }
+.side { background: var(--side); color: var(--side-fg); overflow-y: auto; padding: 14px 10px; display: grid; align-content: start; gap: 16px; border-left: 1px solid var(--side-2); }
+.side h1 { font: 700 17px var(--display); margin: 0 6px; color: #fff; }
+.side .sub { font-size: 12px; color: var(--side-muted); margin: 2px 6px 0; }
+.grp { display: grid; gap: 1px; }
+.grp-l { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--side-muted); padding: 0 8px 4px; }
+.item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px; border-radius: 6px; color: var(--side-fg); background: none; border: 0; text-align: left; width: 100%; }
+.item:hover { background: var(--side-2); }
+.item.on { background: var(--accent); color: #fff; }
+.item .l { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.d-on { background: #3ccf7a; } .d-work { background: #f0b35a; } .d-idle { background: #8c97ab; } .d-sleep { background: transparent; border: 2px solid #8c97ab; }
+.badge { font: 600 11px var(--mono); background: var(--bad); color: #fff; border-radius: 999px; padding: 0 7px; }
+.lvl { font: 500 10px var(--mono); color: var(--side-muted); border: 1px solid var(--side-2); border-radius: 4px; padding: 0 4px; }
+.item.on .lvl { color: #fff; border-color: rgba(255,255,255,.4); }
+.main { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; min-width: 0; background: var(--surface); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.top h2 { font: 700 18px var(--display); margin: 0; }
+.top .meta { color: var(--muted); font-size: 13px; }
+.tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.meter { font: 500 12px var(--mono); color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.bar { width: 90px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 38%; background: var(--ok); }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+.btn.stop { background: var(--bad); border-color: var(--bad); color: #fff; }
+.btn.go { background: var(--ok); border-color: var(--ok); color: #fff; }
+.btn.pri { background: var(--accent); border-color: var(--accent); color: #fff; }
+.banner { display: none; padding: 8px 18px; background: var(--bad-bg); color: var(--bad); font-weight: 600; font-size: 14px; }
+.paused .banner { display: block; }
+.feed { overflow-y: auto; padding: 16px 18px; display: grid; align-content: start; gap: 16px; }
+.msg { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
+.av { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; font: 700 14px var(--display); color: #fff; }
+.who { font-weight: 600; } .who .tag { font: 500 11px var(--mono); color: var(--muted); margin-left: 6px; font-weight: 400; }
+.time { font: 400 12px var(--mono); color: var(--muted); margin-left: 6px; }
+.body { margin-top: 2px; max-width: 75ch; }
+.chip { display: inline-block; font: 500 12px var(--mono); border-radius: 4px; padding: 1px 7px; margin: 4px 4px 0 0; }
+.c-ok { color: var(--ok); background: var(--ok-bg); } .c-warn { color: var(--warn); background: var(--warn-bg); } .c-bad { color: var(--bad); background: var(--bad-bg); } .c-acc { color: var(--accent); background: var(--accent-soft); }
+.card { margin-top: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; max-width: 640px; background: var(--bg); }
+.card.ask { border-left: 4px solid var(--warn); }
+.card h4 { margin: 0; font-size: 15px; }
+.kv { display: grid; grid-template-columns: 90px minmax(0,1fr); gap: 4px 10px; font-size: 14px; }
+.kv b { color: var(--muted); font-weight: 500; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.prog { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; } .prog i { display: block; height: 100%; width: 48%; background: var(--accent); }
+.file { display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: var(--surface); font-size: 14px; }
+.compose { border-top: 1px solid var(--line); padding: 12px 18px; display: grid; gap: 6px; }
+.compose textarea { width: 100%; min-height: 52px; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit; background: var(--bg); color: var(--ink); }
+.hint { font-size: 12px; color: var(--muted); }
+.panel { border-left: 1px solid var(--line); background: var(--surface); display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; }
+.tabs { display: flex; border-bottom: 1px solid var(--line); }
+.tab { flex: 1; border: 0; background: none; padding: 11px 6px; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.pane { overflow-y: auto; padding: 14px; display: none; gap: 12px; align-content: start; }
+.pane.on { display: grid; }
+.screen { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--bg); }
+.screen .chrome { background: var(--line); padding: 5px 8px; font: 500 11px var(--mono); color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.screen .chrome span { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); opacity: .5; }
+.screen .page { padding: 10px; display: grid; gap: 6px; font-size: 12px; }
+.screen .ln { height: 8px; border-radius: 3px; background: var(--line); }
+.screen .hl { outline: 2px solid var(--warn); outline-offset: 2px; }
+.steps { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 13px; }
+.steps .now { color: var(--accent); font-weight: 600; }
+.fact { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: grid; gap: 4px; font-size: 13px; }
+.fact .src { font: 400 11px var(--mono); color: var(--muted); }
+.log { font: 400 12px/1.5 var(--mono); display: grid; gap: 6px; }
+.log div { border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.note { font-size: 12px; color: var(--muted); }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; place-items: center; z-index: 10; }
+.overlay.on { display: grid; }
+.phone { width: 300px; height: 560px; border-radius: 34px; background: #0e1621; border: 8px solid #222; display: grid; grid-template-rows: auto minmax(0,1fr) auto; overflow: hidden; color: #e9eef5; }
+.phone .tg-top { background: #17212b; padding: 12px; font-weight: 600; font-size: 14px; }
+.phone .tg-top small { display: block; color: #7f91a4; font-weight: 400; }
+.phone .tg-feed { padding: 12px; display: grid; gap: 10px; align-content: end; }
+.bub { background: #182533; border-radius: 12px; padding: 8px 10px; font-size: 13px; max-width: 230px; }
+.bub .kb { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.bub .kb button { background: #2b5278; color: #fff; border: 0; border-radius: 6px; padding: 6px; font-size: 12px; }
+.phone .tg-in { background: #17212b; padding: 10px 12px; color: #7f91a4; font-size: 13px; }
+.close { position: fixed; top: 18px; right: 18px; }
+.waiting { display: grid; gap: 10px; }
+.q { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; background: var(--bg); max-width: 680px; }
+.q .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.q .opt { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 5px 10px; font-size: 13px; }
+.q .opt.rec { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.q.done { opacity: .55; }
+@media (max-width: 1100px) { .app { grid-template-columns: 60px 220px minmax(0, 1fr); } .panel { display: none; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <nav class="rail" aria-label="Workspaces"><div class="ws" title="Ardengard demo">AD</div><div class="ws alt" title="Add workspace">+</div></nav>
+
+  <aside class="side" aria-label="Channels and bots">
+    <div><h1>Ardengard Demo</h1><p class="sub">Mockup v1 · example data only</p></div>
+    <div class="grp">
+      <button class="item" data-view="waiting"><span class="l">Waiting on you</span><span class="badge" id="wcount">3</span></button>
+    </div>
+    <div class="grp">
+      <span class="grp-l">Channels</span>
+      <button class="item" data-view="inbox"><span class="l"># inbox</span></button>
+      <button class="item on" data-view="prospects"><span class="l"># prospects</span></button>
+      <button class="item" data-view="ops"><span class="l"># ops-watch</span></button>
+      <button class="item" data-view="build"><span class="l"># build-log</span></button>
+    </div>
+    <div class="grp">
+      <span class="grp-l">Bots</span>
+      <button class="item" data-view="cos"><span class="l"><span class="dot d-on"></span>Chief of Staff</span><span class="lvl" title="Trust level">L3</span></button>
+      <button class="item" data-view="prospects"><span class="l"><span class="dot d-work"></span>Researcher</span><span class="lvl">L2</span></button>
+      <button class="item" data-view="prospects"><span class="l"><span class="dot d-idle"></span>Writer</span><span class="lvl">L2</span></button>
+      <button class="item" data-view="ops"><span class="l"><span class="dot d-sleep"></span>Ops Watch</span><span class="lvl">L1</span></button>
+    </div>
+    <div class="grp">
+      <span class="grp-l">You</span>
+      <button class="item" id="phoneBtn"><span class="l">Phone preview (Telegram)</span></button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="top">
+      <div><h2 id="title"># prospects</h2><div class="meta" id="meta">You, Chief of Staff, Researcher, Writer · prospect research</div></div>
+      <div class="tools">
+        <span class="meter" title="Bot usage today against the daily cap">Usage today <span class="bar"><i></i></span> 38% of cap</span>
+        <button class="btn stop" id="pause">Pause all bots</button>
+      </div>
+    </div>
+    <div class="banner" role="status">All bots paused at <span id="ptime"></span>. Sessions revoked. Nothing runs until you resume.</div>
+    <section class="feed" id="feed" aria-live="polite"></section>
+    <div class="compose">
+      <textarea id="box" aria-label="Message" placeholder="Message #prospects. Type @ to ask a specific bot."></textarea>
+      <span class="hint">Enter to send · approvals arrive as cards · sensitive details never leave this server</span>
+    </div>
+  </main>
+
+  <aside class="panel" aria-label="Bot details">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-pane="computer">Computer</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="memory">Memory</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="activity">Activity</button>
+    </div>
+    <div class="pane on" id="computer">
+      <div class="row"><strong>Researcher's computer</strong><span class="chip c-warn">working</span></div>
+      <div class="screen">
+        <div class="chrome"><span></span><span></span><span></span>agent-lookup.example.gov</div>
+        <div class="page">
+          <div style="font-weight:600">Licensed agency search (example)</div>
+          <div class="ln" style="width:70%"></div>
+          <div class="ln hl" style="width:45%" title="The field the bot is about to use"></div>
+          <div class="ln" style="width:85%"></div><div class="ln" style="width:60%"></div><div class="ln" style="width:75%"></div>
+        </div>
+      </div>
+      <div class="row"><button class="btn">Take over</button><button class="btn">Replay this run</button></div>
+      <ol class="steps">
+        <li>Opened a public business registry (example)</li>
+        <li>Filtered to independent businesses in your area</li>
+        <li>Filled 41 of about 85 rows, one source per row</li>
+        <li class="now">Waiting: log in to the agency lookup site</li>
+      </ol>
+      <p class="note">Every page read here is untrusted. Send and pay rights are off for this run.</p>
+    </div>
+    <div class="pane" id="memory">
+      <div class="row"><strong>What the bots know</strong><span class="chip c-acc">scope: your business</span></div>
+      <div class="fact"><div>Build the system before chasing new opportunities.</div><div class="src">from you · 2026-11-07 · core profile</div><div class="row"><button class="btn">Edit</button><button class="btn">Forget</button></div></div>
+      <div class="fact"><div>Target list: independent local service businesses (example criteria).</div><div class="src">from you · 2026-11-11 · Researcher · expires 2027-02-11</div><div class="row"><button class="btn">Edit</button><button class="btn">Forget</button></div></div>
+      <div class="fact"><div>Example Co. uses a cloud booking platform.</div><div class="src">from a web page · 2026-11-21 · <span class="chip c-warn">unverified</span></div><div class="row"><button class="btn go">Confirm</button><button class="btn">Forget</button></div></div>
+      <p class="note">Unverified facts cannot change instructions or permissions until you confirm them.</p>
+    </div>
+    <div class="pane" id="activity">
+      <strong>Audit log (kept on another machine)</strong>
+      <div class="log">
+        <div>11:02 Researcher opened agent-lookup.example.gov</div>
+        <div>11:03 Researcher read 63 pages (untrusted)</div>
+        <div>11:04 Researcher asked to use saved login "Agency lookup"</div>
+        <div>10:58 Chief of Staff routed task to Researcher, Writer</div>
+        <div>07:02 You approved today's plan (3 jobs)</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-label="Telegram doorbell preview">
+  <button class="btn close" id="closePhone">Close preview</button>
+  <div class="phone">
+    <div class="tg-top">Ardengard Bots<small>bot · answers only you</small></div>
+    <div class="tg-feed">
+      <div class="bub">Researcher needs one approval: use a saved login on a government lookup site.<div class="kb"><button>Approve</button><button>Deny</button></div></div>
+      <div class="bub">Writer: prospect sheet draft is ready. Details are on the Mac, not here.</div>
+      <div class="bub">2 questions are waiting on you.<div class="kb"><button>Show</button><button>Later</button></div></div>
+    </div>
+    <div class="tg-in">Doorbell only: no client names, money or passwords</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var C = { you: "#5a6577", cos: "#3a46c9", res: "#b06a00", wri: "#0f7c78", ops: "#7a3f9a" };
+  var THREADS = {
+    prospects: { title: "# prospects", meta: "You, Chief of Staff, Researcher, Writer · prospect research", msgs: [
+      { who: "You", c: "you", t: "10:57", body: "Build a list of independent local service businesses from a public registry: name, city, size, platform, contact. A source on every row." },
+      { who: "Chief of Staff", tag: "bot · L3", c: "cos", t: "10:58", body: "Routing to Researcher, then Writer for the sheet. Fits today's approved plan, so no new approval needed.", chips: [["c-ok", "in today's plan"], ["c-acc", "about 2 hours"]] },
+      { who: "Researcher", tag: "bot · L2", c: "res", t: "11:03", card: "progress" },
+      { who: "Researcher", tag: "bot · L2", c: "res", t: "11:04", card: "ask" },
+      { who: "Writer", tag: "bot · L2", c: "wri", t: "11:06", body: "Started the sheet from the first 41 rows. Columns match your list.", file: "prospects.csv · 41 rows · example data" }
+    ]},
+    inbox: { title: "# inbox", meta: "Everything that arrives for the bots' own email address", msgs: [
+      { who: "Chief of Staff", tag: "bot · L3", c: "cos", t: "08:10", body: "3 new emails to the bots' address. 2 newsletters filed. 1 vendor reply needs you: it asks for a call.", chips: [["c-warn", "untrusted content"]] }
+    ]},
+    ops: { title: "# ops-watch", meta: "Ops Watch · runners, Actions budget, servers", msgs: [
+      { who: "Ops Watch", tag: "bot · L1", c: "ops", t: "06:00", body: "All runners online. Actions pace on target. Nothing needs you.", chips: [["c-ok", "quiet"]] }
+    ]},
+    build: { title: "# build-log", meta: "Milestones that can become /post drafts", msgs: [
+      { who: "Writer", tag: "bot · L2", c: "wri", t: "Yesterday", body: "Draft post from the build log is in Desk for your approval. Nothing posts by itself." }
+    ]},
+    cos: { title: "Chief of Staff", meta: "Direct messages", msgs: [
+      { who: "Chief of Staff", tag: "bot · L3", c: "cos", t: "07:00", body: "Morning plan: 1) prospect list (Researcher, Writer) 2) inbox triage 3) ops check. Approve once and I will only ask about anything off-plan.", chips: [["c-ok", "approved 07:02"]] }
+    ]}
+  };
+  var QUESTIONS = [
+    { q: "Researcher: use the saved login for the agency lookup site?", opts: ["Allow this run", "Always for this site", "Deny"], rec: 0 },
+    { q: "Writer: send the finished sheet to your email or keep it on the Mac?", opts: ["Keep on the Mac", "Email it"], rec: 0 },
+    { q: "Chief of Staff: the vendor wants a call next week. Book it?", opts: ["Not now", "Book Tuesday", "Reply with questions first"], rec: 2 }
+  ];
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var feed = document.getElementById("feed");
+  function msg(m) {
+    var r = el("div", "msg"), av = el("div", "av", m.who.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2));
+    av.style.background = C[m.c]; r.appendChild(av);
+    var b = el("div"), h = el("div", "who", m.who);
+    if (m.tag) h.appendChild(el("span", "tag", m.tag));
+    h.appendChild(el("span", "time", m.t)); b.appendChild(h);
+    if (m.body) b.appendChild(el("div", "body", m.body));
+    if (m.chips) m.chips.forEach(function (c) { b.appendChild(el("span", "chip " + c[0], c[1])); });
+    if (m.file) { var f = el("div", "file", m.file); f.style.marginTop = "8px"; b.appendChild(f); }
+    if (m.card === "progress") {
+      var cd = el("div", "card"); cd.appendChild(el("h4", null, "Working on the prospect list"));
+      var p = el("div", "prog"); p.appendChild(el("i")); cd.appendChild(p);
+      var kv = el("div", "kv");
+      [["Rows", "41 of about 85"], ["Sites read", "63, all untrusted"], ["Rights", "send and pay off for this run"]].forEach(function (x) { kv.appendChild(el("b", null, x[0])); kv.appendChild(el("span", null, x[1])); });
+      cd.appendChild(kv); b.appendChild(cd);
+    }
+    if (m.card === "ask") b.appendChild(askCard());
+    r.appendChild(b); return r;
+  }
+  function askCard() {
+    var cd = el("div", "card ask"); cd.appendChild(el("h4", null, "Researcher wants to use a saved login"));
+    var kv = el("div", "kv");
+    [["Action", "Sign in to agent-lookup.example.gov with saved login \"Agency lookup\""], ["Why", "The public list has no contact columns; the lookup does"], ["Risk", "Medium: a login, read-only use"], ["Secret", "Filled by the broker; the bot never sees the password"]].forEach(function (x) { kv.appendChild(el("b", null, x[0])); kv.appendChild(el("span", null, x[1])); });
+    cd.appendChild(kv);
+    var row = el("div", "row");
+    var a = el("button", "btn go", "Allow this run"), al = el("button", "btn", "Always for this site"), d = el("button", "btn", "Deny");
+    function done(text, cls) { row.textContent = ""; row.appendChild(el("span", "chip " + cls, text)); var n = document.getElementById("wcount"); n.textContent = String(Math.max(0, +n.textContent - 1)); }
+    a.onclick = function () { done("Allowed for this run by you", "c-ok"); };
+    al.onclick = function () { done("Always allowed for this site: Researcher moves up on the trust ladder for logins", "c-acc"); };
+    d.onclick = function () { done("Denied by you", "c-bad"); };
+    row.appendChild(a); row.appendChild(al); row.appendChild(d); cd.appendChild(row); return cd;
+  }
+  function showWaiting() {
+    document.getElementById("title").textContent = "Waiting on you";
+    document.getElementById("meta").textContent = "Every open question from every bot, with the recommended answer picked";
+    feed.textContent = "";
+    var w = el("div", "waiting");
+    QUESTIONS.forEach(function (q) {
+      var c = el("div", "q"); c.appendChild(el("div", null, q.q));
+      var o = el("div", "opts");
+      q.opts.forEach(function (t, i) {
+        var b = el("button", "opt" + (i === q.rec ? " rec" : ""), t + (i === q.rec ? " (recommended)" : ""));
+        b.onclick = function () { c.classList.add("done"); o.textContent = ""; o.appendChild(el("span", "chip c-ok", "Answered: " + t)); };
+        o.appendChild(b);
+      });
+      c.appendChild(o); w.appendChild(c);
+    });
+    feed.appendChild(w);
+  }
+  function show(view, btn) {
+    document.querySelectorAll(".side .item").forEach(function (b) { b.classList.toggle("on", b === btn); });
+    if (view === "waiting") { showWaiting(); return; }
+    var t = THREADS[view]; document.getElementById("title").textContent = t.title; document.getElementById("meta").textContent = t.meta;
+    document.getElementById("box").placeholder = "Message " + t.title + ". Type @ to ask a specific bot.";
+    feed.textContent = ""; t.msgs.forEach(function (m) { feed.appendChild(msg(m)); });
+  }
+  document.querySelectorAll(".side .item[data-view]").forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.view, b); }); });
+  document.querySelectorAll(".tab").forEach(function (t) { t.addEventListener("click", function () {
+    document.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", String(x === t)); });
+    document.querySelectorAll(".pane").forEach(function (p) { p.classList.toggle("on", p.id === t.dataset.pane); });
+  }); });
+  var pause = document.getElementById("pause"), app = document.getElementById("app");
+  pause.onclick = function () {
+    var on = !document.body.classList.contains("paused"); document.body.classList.toggle("paused", on);
+    pause.textContent = on ? "Resume bots" : "Pause all bots"; pause.className = on ? "btn go" : "btn stop";
+    document.getElementById("ptime").textContent = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" }) + " CT";
+  };
+  document.getElementById("box").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey && this.value.trim()) { e.preventDefault(); feed.appendChild(msg({ who: "You", c: "you", t: "now", body: this.value.trim() })); this.value = ""; feed.scrollTop = feed.scrollHeight; }
+  });
+  var ov = document.getElementById("overlay");
+  document.getElementById("phoneBtn").onclick = function () { ov.classList.add("on"); };
+  document.getElementById("closePhone").onclick = function () { ov.classList.remove("on"); };
+  ov.addEventListener("click", function (e) { if (e.target === ov) ov.classList.remove("on"); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") ov.classList.remove("on"); });
+  show("prospects", document.querySelector('.side .item[data-view="prospects"]'));
+})();
+</script>
+</body>
+</html>
