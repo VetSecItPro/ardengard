@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  docs-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the workbook and check generated files are current
+        run: |
+          python3 scripts/build_workbook.py
+          git diff --exit-code -- artifacts workbook docs
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
