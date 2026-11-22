@@ -471,3 +471,10 @@ Newest entries at the bottom. Central time on every entry.
 - **Gatehouse refinements (round 4):** bolder, forest, night, gold, crew lights, badge, checked at full and small sizes; no
   unintended readings. Claude's pick: Forest (pines behind the gatehouse: forest and keep, the name in one image). The Night
   version's moon came out lumpy.
+
+## 2026-11-22 13:52 CT
+
+- **Operator:** save and document everything so the session can be closed.
+- **State at close:** design phase. Waiting on the operator: approve the PRD and build plan (backlog #3), share the workbook
+  page with the second Claude account (#4), pick the Gatehouse icon (#17; Claude recommends Forest) and confirm the crew (#16).
+  Next build step once approved: phase P0, the six spikes. Brand work shipped to GitHub in this close-out.

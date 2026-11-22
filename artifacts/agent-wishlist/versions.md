@@ -20,3 +20,4 @@ the operator's other Claude account, which cannot be updated from this one (17.s
 | 10 | 2026-11-22 10:44 CT | 1795365857-522d | Rebuilt from the new 38.ardengard repo layout |
 | 11 | 2026-11-22 11:35 CT | 1795368926-b7cd | Out of the box area, extended cast |
 | 12 | 2026-11-22 11:37 CT | 1795369043-e144 | The crew section: role cards and packs |
+| 13 | 2026-11-22 11:42 CT | 1795369392-e4a5 | Crew overlap fixes; icon round 3 notes |
