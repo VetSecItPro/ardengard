@@ -391,3 +391,14 @@ Newest entries at the bottom. Central time on every entry.
   business specifics and the unabridged log. Public files use generic wording; the earlier entries in this log were edited for
   privacy only, and the full originals are kept privately. The unpublished first commit was rewritten so the history holds
   none of the private details.
+
+## 2026-11-22 11:19 CT
+
+- **Asked:** create a mascot and icon in Codex; five ideas on a contact sheet in the browser.
+- **Done:** five icon and mascot pairs generated with Codex image generation into brand/concepts/2026-11-22-codex/ (prompt,
+  run log, 10 images at 1024 px) and a contact sheet opened in Chrome. Palette: forest green, ember gold, parchment, slate.
+  Concepts: Forest Keep with Owl Warden, Oak Shield with Fox Knight, Lit Gate with Stone Keeper, Raven Tower with Raven Scribe,
+  Key Leaf with Badger Keyholder.
+- **Claude's read:** Key Leaf is the strongest icon (one bold shape that still reads at 32 px, and keys mean permissions).
+  Forest Keep reads more like a hut than a keep. Owl Warden and Raven Scribe are the strongest mascots; the raven ties to
+  memory (Odin's ravens are Thought and Memory). Icons and mascots can be mixed across concepts.
