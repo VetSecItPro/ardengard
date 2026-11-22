@@ -462,3 +462,12 @@ Newest entries at the bottom. Central time on every entry.
   the crew, round 2 icons rejected, round 1). The three per-round sheets were removed. Saved as a standing rule.
 - **Operator:** the Gatehouse icon is the closest to nice in this group.
 - **Next:** a refinement round of Gatehouse variants, added to the same sheet.
+
+## 2026-11-22 11:49 CT
+
+- **Operator:** rename the sheet Ardengard brand sheet, keep updating it, remove past rounds and keep the latest.
+- **Done:** brand/ardengard-brand-sheet.html shows only the current state: the latest icon round and the crew; no past rounds,
+  no status labels. Past rounds stay in brand/concepts/ dated folders. Standing rule updated.
+- **Gatehouse refinements (round 4):** bolder, forest, night, gold, crew lights, badge, checked at full and small sizes; no
+  unintended readings. Claude's pick: Forest (pines behind the gatehouse: forest and keep, the name in one image). The Night
+  version's moon came out lumpy.
