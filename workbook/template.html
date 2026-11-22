@@ -157,6 +157,14 @@ footer { color: var(--muted); font-size: 0.85rem; }
 .gap h3 { font-size: 1.02rem; }
 .gap .src { font-size: 0.82rem; color: var(--muted); }
 .gap .fix a { color: var(--accent); font-weight: 600; }
+.crewgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.rolecard { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.rolecard.ext { border-left-color: var(--beyond); }
+.rolecard h3 { font-size: 1.12rem; } .rolecard .rl { font: 600 0.76rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.rolecard ul { margin: 0; padding-left: 1.1em; display: grid; gap: 2px; font-size: 0.9rem; }
+.rolecard .nv li { color: var(--missing); }
+.rolecard .k { font: 600 0.72rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.rolecard .perm { font-size: 0.85rem; color: var(--muted); }
 .box .label { font: 600 0.78rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
 .box .none { color: var(--muted); font-style: italic; }
 .idea-links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -197,6 +205,7 @@ ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
   </div>
   <div class="grp" id="nav-build">
     <span class="grp-label">Build</span>
+    <a href="#crew" data-sec="crew">The crew <span class="n" id="nav-crew"></span></a>
     <a href="#prd" data-sec="prd">Product requirements <span class="n" id="nav-req"></span></a>
     <a href="#plan" data-sec="plan">Build plan <span class="n" id="nav-tasks"></span></a>
   </div>
@@ -272,6 +281,14 @@ ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
       <div class="phase"><span class="step">Step 3</span><h3>Turn areas into the spec</h3><ul><li>Each area becomes a spec chapter in our words.</li><li>Smallest core first: Buzz, one bot, one computer, Telegram doorbell, memory.</li></ul></div>
       <div class="phase"><span class="step">Step 4</span><h3>Build, run, then share</h3><ul><li>Build in an open repo, posting milestones through /post.</li><li>Run each release yourself for the demo.</li><li>Then share with your community, labeled experimental.</li></ul></div>
     </div>
+  </section>
+
+  <section id="crew">
+    <div class="sec-head"><h2>The crew</h2><p id="crew-status"></p></div>
+    <div class="note"><span class="label blue">Rules for every role</span><ul id="crew-rules"></ul></div>
+    <h3 class="repo-h" id="crew-core-h"></h3><div class="crewgrid" id="crew-core"></div>
+    <h3 class="repo-h" id="crew-ext-h"></h3><div class="crewgrid" id="crew-ext"></div>
+    <div class="note"><span class="label blue">Packs</span><ul id="crew-packs"></ul></div>
   </section>
 
   <section id="prd">
@@ -395,6 +412,29 @@ ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
     c.appendChild(el("span", "num", "#" + i.id)); c.appendChild(el("h3", null, i.title)); c.appendChild(el("p", null, p[1]));
     picks.appendChild(c);
   });
+
+  /* Crew */
+  var CR = D.crew, rname = {};
+  CR.roles.forEach(function (r) { rname[r.id] = r.mascot; });
+  document.getElementById("crew-status").textContent = CR.status + " · " + CR.roles.length + " roles · updated " + CR.updated;
+  document.getElementById("nav-crew").textContent = String(CR.roles.length);
+  CR.rules.forEach(function (x) { document.getElementById("crew-rules").appendChild(el("li", null, x)); });
+  ["core", "extended"].forEach(function (tier) {
+    var host = document.getElementById(tier === "core" ? "crew-core" : "crew-ext");
+    var list_ = CR.roles.filter(function (r) { return r.tier === tier; });
+    document.getElementById(tier === "core" ? "crew-core-h" : "crew-ext-h").textContent = (tier === "core" ? "Core crew, always installed (" : "Extended cast, added by packs (") + list_.length + ")";
+    list_.forEach(function (r) {
+      var c = el("div", "rolecard" + (tier === "core" ? "" : " ext"));
+      c.appendChild(el("span", "rl", r.role)); c.appendChild(el("h3", null, r.mascot)); c.appendChild(el("p", null, r.purpose));
+      c.appendChild(el("span", "k", "Does")); c.appendChild(list(r.does));
+      c.appendChild(el("span", "k", "Never")); c.appendChild(list(r.never, "nv"));
+      c.appendChild(el("span", "k", "Default permissions"));
+      c.appendChild(el("p", "perm", Object.keys(r.permissions).map(function (k) { return k + ": " + r.permissions[k]; }).join(" · ")));
+      c.appendChild(el("p", "perm", "Skills: " + r.skills.join(", ") + ". Routines: " + (r.routines.length ? r.routines.join(", ") : "none") + ". Works with: " + r.works_with + "."));
+      host.appendChild(c);
+    });
+  });
+  CR.packs.forEach(function (p) { document.getElementById("crew-packs").appendChild(el("li", null, p.name + ": " + p.roles.map(function (x) { return rname[x]; }).join(", "))); });
 
   /* PRD and build plan */
   var P = D.prd, B = D.plan;

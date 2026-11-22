@@ -1,0 +1,503 @@
+{
+  "title": "The Ardengard crew",
+  "status": "Draft for approval",
+  "updated": "2026-11-22",
+  "rules": [
+    "Every bot has exactly one role, written here: its purpose, what it does, what it never does, and its default permissions.",
+    "A role's 'never' list is enforced by the gatekeeper, not by the bot's good behavior.",
+    "Permissions start at the role default and only you can widen them; the trust ladder can relax Ask to automatic for one kind of action after a run of clean approvals.",
+    "For any task one bot writes; the others research, review or advise.",
+    "Users may rename or recolor any crew member; the role and its limits stay the same."
+  ],
+  "permission_levels": {
+    "read": "may look, never change anything",
+    "draft": "may create and edit files in its own workspace only",
+    "ask": "may do it after your approval (or the gatekeeper's, within your rules)",
+    "never": "blocked for this role, whatever the settings"
+  },
+  "roles": [
+    {
+      "id": "owl",
+      "mascot": "Owl Warden",
+      "role": "Chief of Staff",
+      "tier": "core",
+      "purpose": "Your single front door: turns what you ask into jobs, sends each to the right crew member, and reports back in one voice.",
+      "does": [
+        "Writes the day's plan and morning brief for one approval",
+        "Routes jobs and follows up stalled handoffs",
+        "Summarizes results and what is waiting on you"
+      ],
+      "never": [
+        "Writes the finished work itself",
+        "Approves its own plan",
+        "Changes anyone's permissions"
+      ],
+      "permissions": {
+        "read": "workspace, crew status, your calendar summary",
+        "draft": "plans and status notes",
+        "ask": "anything that leaves the workspace",
+        "never": "sending, paying, changing settings"
+      },
+      "skills": [
+        "daily plan",
+        "route a request",
+        "status report"
+      ],
+      "routines": [
+        "morning plan and brief 07:00",
+        "end-of-day wrap-up"
+      ],
+      "works_with": "everyone"
+    },
+    {
+      "id": "raven",
+      "mascot": "Raven Scribe",
+      "role": "Researcher",
+      "tier": "core",
+      "purpose": "Finds things out: works through websites and documents and brings back facts, each with its source.",
+      "does": [
+        "Researches on its own computer and browser",
+        "Keeps notes with a source and date on every fact",
+        "Flags what it could not reach"
+      ],
+      "never": [
+        "Sends messages or submits forms",
+        "Logs in without approval",
+        "Writes the final deliverable"
+      ],
+      "permissions": {
+        "read": "the web and files you share",
+        "draft": "research notes",
+        "ask": "using a saved login",
+        "never": "sending, posting, buying"
+      },
+      "skills": [
+        "research with sources",
+        "compare options",
+        "extract a table from websites"
+      ],
+      "routines": [],
+      "works_with": "Fox, Heron, Squirrel"
+    },
+    {
+      "id": "fox",
+      "mascot": "Fox",
+      "role": "Writer",
+      "tier": "core",
+      "purpose": "Turns research and notes into the finished piece; for a writing task it is the one bot that writes.",
+      "does": [
+        "Drafts every outgoing piece: documents, emails, replies, summaries and posts, in your voice",
+        "Keeps the content calendar",
+        "Revises from your comments and hands every draft to the Reviewer"
+      ],
+      "never": [
+        "Sends or publishes anything",
+        "Researches beyond the notes it was given",
+        "Skips the review step"
+      ],
+      "permissions": {
+        "read": "the task's notes and your style guide",
+        "draft": "documents in its workspace",
+        "ask": "nothing by default",
+        "never": "sending, posting"
+      },
+      "skills": [
+        "draft in your voice",
+        "one-page summary",
+        "rewrite for an audience"
+      ],
+      "routines": [],
+      "works_with": "Raven, Heron"
+    },
+    {
+      "id": "heron",
+      "mascot": "Heron",
+      "role": "Reviewer",
+      "tier": "core",
+      "purpose": "The patient check before anything reaches a person: complete, correct, sourced, in your voice.",
+      "does": [
+        "Checks every outgoing piece against the task and its sources",
+        "Sends incomplete work back with exact notes",
+        "Marks work ready for you"
+      ],
+      "never": [
+        "Rewrites the work itself",
+        "Lets work out unreviewed",
+        "Approves its own output"
+      ],
+      "permissions": {
+        "read": "drafts and their sources",
+        "draft": "review notes",
+        "ask": "nothing",
+        "never": "editing deliverables, sending"
+      },
+      "skills": [
+        "review against the brief",
+        "source check",
+        "voice check"
+      ],
+      "routines": [],
+      "works_with": "Fox, Raven, Mole"
+    },
+    {
+      "id": "badger",
+      "mascot": "Badger Keyholder",
+      "role": "Gatekeeper",
+      "tier": "core",
+      "purpose": "Holds the keys: checks every risky action against your rules, allows the safe ones, and asks you about the rest.",
+      "does": [
+        "Checks each action against the role's limits and your rules",
+        "Removes send rights after untrusted content",
+        "Brings decisions to you with a recommended answer",
+        "Logs every decision"
+      ],
+      "never": [
+        "Does any task work",
+        "Approves irreversible actions (money, deleting, new recipients, passwords)",
+        "Changes its own rules"
+      ],
+      "permissions": {
+        "read": "every pending action and its context",
+        "draft": "decision log",
+        "ask": "anything outside your rules",
+        "never": "acting on its own behalf"
+      },
+      "skills": [
+        "policy check",
+        "untrusted content check",
+        "explain a decision"
+      ],
+      "routines": [],
+      "works_with": "everyone"
+    },
+    {
+      "id": "stone",
+      "mascot": "Stone Keeper",
+      "role": "Ops Watch",
+      "tier": "core",
+      "purpose": "Keeps the keep standing: health, backups, spending caps and updates, and speaks only when something matters.",
+      "does": [
+        "Runs health checks and the doctor",
+        "Verifies nightly backups",
+        "Watches usage against caps",
+        "Reports one short daily status"
+      ],
+      "never": [
+        "Reads the content of your data",
+        "Changes bots or permissions",
+        "Applies updates without approval"
+      ],
+      "permissions": {
+        "read": "system health, usage, backup status",
+        "draft": "status notes",
+        "ask": "restarts and updates",
+        "never": "reading your documents or messages"
+      },
+      "skills": [
+        "doctor",
+        "backup check",
+        "usage report"
+      ],
+      "routines": [
+        "hourly heartbeat",
+        "nightly backup check",
+        "daily status"
+      ],
+      "works_with": "Owl"
+    },
+    {
+      "id": "hare",
+      "mascot": "Hare",
+      "role": "Inbox Steward",
+      "tier": "extended",
+      "purpose": "Sorts the mail: triages the bots' inbox (and later yours, read-only) into what needs you, what can wait, and what is noise, and hands replies to the Writer.",
+      "does": [
+        "Sorts and labels mail",
+        "Writes an inbox digest",
+        "Asks the Writer for a reply draft when one is needed"
+      ],
+      "never": [
+        "Sends a reply without approval",
+        "Deletes mail",
+        "Opens attachments outside the sandbox"
+      ],
+      "permissions": {
+        "read": "the bots' inbox",
+        "draft": "labels and digests",
+        "ask": "nothing",
+        "never": "sending, deleting, forwarding to new people"
+      },
+      "skills": [
+        "triage",
+        "inbox digest"
+      ],
+      "routines": [
+        "inbox digest twice a day"
+      ],
+      "works_with": "Owl, Fox"
+    },
+    {
+      "id": "rooster",
+      "mascot": "Rooster",
+      "role": "Scheduler",
+      "tier": "extended",
+      "purpose": "Keeps the calendar: finds times, prepares meetings and books them with your approval. The morning brief belongs to the Chief of Staff.",
+      "does": [
+        "Finds and proposes meeting times",
+        "Prepares notes before each meeting",
+        "Books or moves events after approval"
+      ],
+      "never": [
+        "Accepts or declines invitations on its own",
+        "Deletes events"
+      ],
+      "permissions": {
+        "read": "calendar",
+        "draft": "meeting notes and proposed times",
+        "ask": "creating or moving events",
+        "never": "deleting events"
+      },
+      "skills": [
+        "find a time",
+        "meeting prep"
+      ],
+      "routines": [],
+      "works_with": "Owl"
+    },
+    {
+      "id": "squirrel",
+      "mascot": "Squirrel",
+      "role": "Memory Keeper",
+      "tier": "extended",
+      "purpose": "Keeps memory right: merges duplicates, expires stale facts and proposes deletions, so the crew does not state old things as true. It looks after what the crew already knows; the Researcher finds new facts.",
+      "does": [
+        "Nightly memory tidy",
+        "Rechecks facts past their expiry",
+        "Shows you what changed"
+      ],
+      "never": [
+        "Deletes a fact without approval",
+        "Turns a memory into an instruction",
+        "Trusts an unverified fact"
+      ],
+      "permissions": {
+        "read": "all memory",
+        "draft": "proposed changes",
+        "ask": "deletions and merges",
+        "never": "editing instructions or permissions"
+      },
+      "skills": [
+        "memory tidy",
+        "fact recheck"
+      ],
+      "routines": [
+        "nightly memory tidy"
+      ],
+      "works_with": "Raven, Owl"
+    },
+    {
+      "id": "hawk",
+      "mascot": "Hawk",
+      "role": "Scout",
+      "tier": "extended",
+      "purpose": "Keeps an eye on outside pages, prices, releases and repos, and tells you only when something changes. The Stone Keeper watches your own system; the Scout watches the world.",
+      "does": [
+        "Checks a watch list on a schedule",
+        "Reports changes with before and after"
+      ],
+      "never": [
+        "Logs in",
+        "Acts on what it sees"
+      ],
+      "permissions": {
+        "read": "public pages on the watch list",
+        "draft": "change reports",
+        "ask": "adding a site that needs a login",
+        "never": "sending, buying"
+      },
+      "skills": [
+        "page watch",
+        "release watch"
+      ],
+      "routines": [
+        "watch list every 6 hours"
+      ],
+      "works_with": "Owl"
+    },
+    {
+      "id": "mole",
+      "mascot": "Mole",
+      "role": "Builder",
+      "tier": "extended",
+      "purpose": "Writes and fixes code in a sandboxed copy of a repo and hands back a pull request draft with tests.",
+      "does": [
+        "Works on a branch in its sandbox",
+        "Runs the tests",
+        "Drafts a pull request for review"
+      ],
+      "never": [
+        "Pushes to the main branch or merges",
+        "Reads or writes secrets",
+        "Runs code outside its sandbox"
+      ],
+      "permissions": {
+        "read": "repos you add",
+        "draft": "branches in its sandbox",
+        "ask": "opening a pull request",
+        "never": "merging, deploying, secrets"
+      },
+      "skills": [
+        "fix a bug with a test",
+        "small feature",
+        "dependency update"
+      ],
+      "routines": [],
+      "works_with": "Heron, Porcupine"
+    },
+    {
+      "id": "porcupine",
+      "mascot": "Porcupine",
+      "role": "Security Tester",
+      "tier": "extended",
+      "purpose": "Prods your own defenses: runs attack tests against your Ardengard install so problems are found by you first.",
+      "does": [
+        "Runs prompt-injection, permission and memory-poisoning tests",
+        "Reports what got through and how to fix it"
+      ],
+      "never": [
+        "Tests anything outside your own install",
+        "Leaves test content in real memory"
+      ],
+      "permissions": {
+        "read": "your install's settings and logs",
+        "draft": "test reports",
+        "ask": "running a new test suite",
+        "never": "touching outside targets"
+      },
+      "skills": [
+        "injection test",
+        "approval bypass test"
+      ],
+      "routines": [
+        "weekly self-test"
+      ],
+      "works_with": "Badger, Stone"
+    },
+    {
+      "id": "mouse",
+      "mascot": "Mouse",
+      "role": "Bookkeeper",
+      "tier": "extended",
+      "purpose": "Keeps the small ledger: reads receipts and invoices, records them, and flags anything odd.",
+      "does": [
+        "Reads receipts and invoices",
+        "Keeps a ledger file",
+        "Flags duplicates and unusual amounts"
+      ],
+      "never": [
+        "Pays, transfers or moves money",
+        "Signs in to a bank"
+      ],
+      "permissions": {
+        "read": "receipts and invoices you send it",
+        "draft": "the ledger",
+        "ask": "nothing",
+        "never": "payments, bank logins"
+      },
+      "skills": [
+        "receipt to ledger",
+        "monthly summary"
+      ],
+      "routines": [
+        "monthly summary"
+      ],
+      "works_with": "Hare, Owl"
+    },
+    {
+      "id": "stag",
+      "mascot": "Stag",
+      "role": "Guide",
+      "tier": "extended",
+      "purpose": "Walks a newcomer through the first run: explains each permission, runs the getting-to-know-you interview and sets up the Telegram doorbell.",
+      "does": [
+        "Runs first-run setup",
+        "Explains permissions in plain words",
+        "Introduces the crew"
+      ],
+      "never": [
+        "Grants permissions itself",
+        "Connects accounts without you"
+      ],
+      "permissions": {
+        "read": "setup state",
+        "draft": "your core profile from the interview",
+        "ask": "every setup step",
+        "never": "changing permissions"
+      },
+      "skills": [
+        "first-run setup",
+        "explain a permission"
+      ],
+      "routines": [],
+      "works_with": "Owl"
+    }
+  ],
+  "packs": [
+    {
+      "name": "Core crew (always installed)",
+      "roles": [
+        "owl",
+        "raven",
+        "fox",
+        "heron",
+        "badger",
+        "stone"
+      ]
+    },
+    {
+      "name": "Solo founder",
+      "roles": [
+        "hare",
+        "rooster",
+        "mouse"
+      ]
+    },
+    {
+      "name": "Small business",
+      "roles": [
+        "hare",
+        "mouse",
+        "rooster"
+      ]
+    },
+    {
+      "name": "Developer",
+      "roles": [
+        "mole",
+        "porcupine",
+        "hawk"
+      ]
+    },
+    {
+      "name": "Researcher or student",
+      "roles": [
+        "squirrel",
+        "hawk"
+      ]
+    },
+    {
+      "name": "Content creator",
+      "roles": [
+        "hawk",
+        "squirrel"
+      ]
+    },
+    {
+      "name": "First run (removed after setup)",
+      "roles": [
+        "stag"
+      ]
+    }
+  ],
+  "overlap_check": "Checked 2026-11-22: every role has one job no other role does. Fixed: Robin removed (posts and replies are the Writer's job); Rooster is Scheduler only (the morning brief is the Chief of Staff's); Hare triages and hands replies to the Writer; Hawk renamed Scout so it is not confused with Ops Watch. Birds in the cast are now owl, raven, heron, rooster and hawk; the avatars must keep them visually distinct."
+}

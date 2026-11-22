@@ -391,3 +391,90 @@ Newest entries at the bottom. Central time on every entry.
   business specifics and the unabridged log. Public files use generic wording; the earlier entries in this log were edited for
   privacy only, and the full originals are kept privately. The unpublished first commit was rewritten so the history holds
   none of the private details.
+
+## 2026-11-22 11:19 CT
+
+- **Asked:** create a mascot and icon in Codex; five ideas on a contact sheet in the browser.
+- **Done:** five icon and mascot pairs generated with Codex image generation into brand/concepts/2026-11-22-codex/ (prompt,
+  run log, 10 images at 1024 px) and a contact sheet opened in Chrome. Palette: forest green, ember gold, parchment, slate.
+  Concepts: Forest Keep with Owl Warden, Oak Shield with Fox Knight, Lit Gate with Stone Keeper, Raven Tower with Raven Scribe,
+  Key Leaf with Badger Keyholder.
+- **Claude's read:** Key Leaf is the strongest icon (one bold shape that still reads at 32 px, and keys mean permissions).
+  Forest Keep reads more like a hut than a keep. Owl Warden and Raven Scribe are the strongest mascots; the raven ties to
+  memory (Odin's ravens are Thought and Memory). Icons and mascots can be mixed across concepts.
+
+## 2026-11-22 11:32 CT
+
+- **Asked:** are these suitable for a Grok Bot style agent team?
+- **Answer:** partly. Grok Bot, Muse, dots and Cue use modern minimal marks, so the storybook icons look like a cozy game next
+  to them, and one mascot says "one assistant" when the product is a team. But builder communities love mascots, and the five
+  characters already map to the bot roles. Recommendation: Key Leaf as the icon, all five mascots as the default crew.
+- **Decided (operator):** reimagine it in that concept.
+- **Done:** round 2 in brand/concepts/2026-11-22-codex-round-2/: five circular crew avatars simplified for chat size (Owl
+  Warden as Chief of Staff, Raven Scribe as Researcher, Fox as Writer, Badger Keyholder as Gatekeeper, Stone Keeper as Ops
+  Watch), a crew lineup at the gate for the README, and three modern Key Leaf icons (geometric, negative space, monoline)
+  compared with the round 1 original at 64 and 32 px on light and dark. Contact sheet opened in Chrome.
+- **Claude's read:** icon A (geometric key) is the strongest: modern, bold, reads at 32 px. Icon C's thin line fades at small
+  sizes; icon B's tile inside a tile looks boxed in. The lineup is ready as the README hero image.
+
+## 2026-11-22 11:35 CT
+
+- **Asked:** other roles we could create mascots for, and what else to provide out of the box for someone installing it.
+- **Answer:** ten more roles for an extended cast (Hare, Inbox Steward; Rooster, Morning Brief; Squirrel, Memory Keeper; Heron,
+  Reviewer; Hawk, Watcher; Mole, Builder; Porcupine, Security Tester; Mouse, Bookkeeper; Robin, Messenger; Stag, Guide),
+  avoiding animals other products already own (hedgehog, beaver, tortoise, firefly, otter, bee, lobster). New design area
+  Out of the box: the core five ship by default; proposed demo mode with fake data, five day-one starter jobs, bot folders with
+  tested skills and safe permissions, a getting-to-know-you interview for the core profile, a routines library, crew packs by
+  kind of user, an ardengard doctor command, a plain-language permissions page, rename and recolor. Four reference repos
+  verified with gh (crewAI-examples dropped: archived).
+
+## 2026-11-22 11:37 CT
+
+- **Operator:** each one will have a role defined for its purpose.
+- **Done:** crew catalog docs/product/crew.json (draft for approval), shown in a new The crew section and generated as
+  crew.md. Five rules (one role per bot; the never list is enforced by the gatekeeper; only the operator widens permissions;
+  one writer per task; rename and recolor allowed), four permission levels (read, draft, ask, never), and fifteen role cards
+  with purpose, does, never, default permissions, starter skills, routines and who each works with. Core crew of six: Owl
+  Warden, Raven Scribe, Fox, Heron (Reviewer, added to the core because the review step is required), Badger Keyholder, Stone
+  Keeper. Extended cast of nine. Packs: Solo founder, Small business, Developer, Researcher or student, Content creator, First run.
+- **Operator:** does not like icons A, B or C; the leaf-shaped key head looks like a vulva, especially B.
+- **Correction (Claude):** agreed; a pointed oval split by a center line reads that way, and Claude recommended A without
+  seeing it. A, B and C are dropped; icon round 3 avoids that shape and every concept is checked for unintended readings first.
+
+## 2026-11-22 11:43 CT
+
+- **Asked:** are the new mascots repeats of the present ones?
+- **Answer:** some duties were. Robin (posts and replies) duplicated the Writer, Rooster's morning brief duplicated the Chief
+  of Staff's morning plan, Hare drafted replies the Writer owns, and Hawk's name "Watcher" clashed with Ops Watch. Fixed in
+  docs/product/crew.json: Robin removed, Rooster is Scheduler only, Hare triages and hands replies to the Writer, Hawk renamed
+  Scout (watches the outside world; the Stone Keeper watches our own system). 14 roles, each with one job no other role does.
+  Five of the cast are birds (owl, raven, heron, rooster, hawk), so their avatars must stay visually distinct.
+- **Icon round 3 (after A, B and C were rejected):** six concepts with strict shape rules, checked at full size and at 64 and
+  32 px for unintended readings before showing; none found. Claude's read: Gatehouse is the strongest and safest. Owl Mark is
+  the most distinctive and ties to the crew, but a green owl face strongly recalls Duolingo's owl (Hootsuite also uses an owl).
+  Round Key is clear but is the stock password-manager key. Lit Arch reads as a sunrise, Crew Crown as a loading indicator,
+  Shield Window as a bowl or boat.
+
+## 2026-11-22 11:44 CT
+
+- **Operator:** update the same contact sheet; no need to create a new file.
+- **Done:** one living sheet, brand/contact-sheet.html, holds every round newest first with status chips (round 3 icons,
+  the crew, round 2 icons rejected, round 1). The three per-round sheets were removed. Saved as a standing rule.
+- **Operator:** the Gatehouse icon is the closest to nice in this group.
+- **Next:** a refinement round of Gatehouse variants, added to the same sheet.
+
+## 2026-11-22 11:49 CT
+
+- **Operator:** rename the sheet Ardengard brand sheet, keep updating it, remove past rounds and keep the latest.
+- **Done:** brand/ardengard-brand-sheet.html shows only the current state: the latest icon round and the crew; no past rounds,
+  no status labels. Past rounds stay in brand/concepts/ dated folders. Standing rule updated.
+- **Gatehouse refinements (round 4):** bolder, forest, night, gold, crew lights, badge, checked at full and small sizes; no
+  unintended readings. Claude's pick: Forest (pines behind the gatehouse: forest and keep, the name in one image). The Night
+  version's moon came out lumpy.
+
+## 2026-11-22 13:52 CT
+
+- **Operator:** save and document everything so the session can be closed.
+- **State at close:** design phase. Waiting on the operator: approve the PRD and build plan (backlog #3), share the workbook
+  page with the second Claude account (#4), pick the Gatehouse icon (#17; Claude recommends Forest) and confirm the crew (#16).
+  Next build step once approved: phase P0, the six spikes. Brand work shipped to GitHub in this close-out.
