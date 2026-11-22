@@ -440,3 +440,25 @@ Newest entries at the bottom. Central time on every entry.
 - **Operator:** does not like icons A, B or C; the leaf-shaped key head looks like a vulva, especially B.
 - **Correction (Claude):** agreed; a pointed oval split by a center line reads that way, and Claude recommended A without
   seeing it. A, B and C are dropped; icon round 3 avoids that shape and every concept is checked for unintended readings first.
+
+## 2026-11-22 11:43 CT
+
+- **Asked:** are the new mascots repeats of the present ones?
+- **Answer:** some duties were. Robin (posts and replies) duplicated the Writer, Rooster's morning brief duplicated the Chief
+  of Staff's morning plan, Hare drafted replies the Writer owns, and Hawk's name "Watcher" clashed with Ops Watch. Fixed in
+  docs/product/crew.json: Robin removed, Rooster is Scheduler only, Hare triages and hands replies to the Writer, Hawk renamed
+  Scout (watches the outside world; the Stone Keeper watches our own system). 14 roles, each with one job no other role does.
+  Five of the cast are birds (owl, raven, heron, rooster, hawk), so their avatars must stay visually distinct.
+- **Icon round 3 (after A, B and C were rejected):** six concepts with strict shape rules, checked at full size and at 64 and
+  32 px for unintended readings before showing; none found. Claude's read: Gatehouse is the strongest and safest. Owl Mark is
+  the most distinctive and ties to the crew, but a green owl face strongly recalls Duolingo's owl (Hootsuite also uses an owl).
+  Round Key is clear but is the stock password-manager key. Lit Arch reads as a sunrise, Crew Crown as a loading indicator,
+  Shield Window as a bowl or boat.
+
+## 2026-11-22 11:44 CT
+
+- **Operator:** update the same contact sheet; no need to create a new file.
+- **Done:** one living sheet, brand/contact-sheet.html, holds every round newest first with status chips (round 3 icons,
+  the crew, round 2 icons rejected, round 1). The three per-round sheets were removed. Saved as a standing rule.
+- **Operator:** the Gatehouse icon is the closest to nice in this group.
+- **Next:** a refinement round of Gatehouse variants, added to the same sheet.

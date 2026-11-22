@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ardengard Brand Sheet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* One living brand sheet, newest round first. Status chips mark what is current, open or rejected. Updated in place every round. */
+:root {
+  --bg: #f6f0e1; --card: #fffaf0; --ink: #1d2a24; --muted: #5d6b63; --line: #e2d8c2; --forest: #1f4d3a; --ember: #e0a23b; --bad: #b42c3c; --bad-bg: #fbe1e4; --ok: #1d7a4a; --ok-bg: #ddf3e6; --chat: #ffffff;
+  --display: "Cormorant Garamond", Georgia, serif; --body: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root { --bg: #141b17; --card: #1c2520; --ink: #ece6d6; --muted: #a3ad9f; --line: #2d3a32; --bad: #ff8a96; --bad-bg: #3d1d24; --ok: #6fd59c; --ok-bg: #17352a; --chat: #1a2029; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); }
+.layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 28px; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px)); }
+nav { position: sticky; top: 0; align-self: start; padding-top: 28px; display: grid; gap: 4px; max-height: 100vh; overflow-y: auto; }
+nav b { font: 700 1.2rem var(--display); margin-bottom: 8px; }
+nav a { color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 0.92rem; }
+nav a:hover { background: var(--line); }
+main { display: grid; gap: 34px; padding-top: 28px; min-width: 0; }
+h1 { font: 700 2.6rem/1.1 var(--display); margin: 0; color: var(--forest); }
+h2 { font: 700 1.9rem/1.2 var(--display); margin: 0; color: var(--forest); }
+h3 { font: 700 1.3rem var(--display); margin: 0; }
+@media (prefers-color-scheme: dark) { h1, h2 { color: var(--ember); } }
+.lede, .sub { color: var(--muted); max-width: 95ch; margin: 6px 0 0; }
+section { display: grid; gap: 14px; scroll-margin-top: 20px; }
+.head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.chip { font: 600 0.75rem var(--mono); letter-spacing: 0.05em; text-transform: uppercase; border-radius: 999px; padding: 2px 10px; }
+.c-open { color: var(--forest); background: #e5ede8; } .c-cur { color: var(--ok); background: var(--ok-bg); } .c-bad { color: var(--bad); background: var(--bad-bg); }
+@media (prefers-color-scheme: dark) { .c-open { color: var(--ember); background: #2a2a1c; } }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+.card.rej { opacity: 0.6; }
+.card img.big { width: 100%; aspect-ratio: 1; border-radius: 22%; object-fit: cover; }
+.card img.round { width: 100%; max-width: 200px; aspect-ratio: 1; border-radius: 50%; object-fit: cover; justify-self: center; }
+.card img.mascot { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; }
+.card p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.note { font-size: 0.85rem; }
+.note.warn { color: var(--bad); }
+.sizes { display: flex; gap: 8px; flex-wrap: wrap; }
+.tile { padding: 8px; border-radius: 8px; display: flex; gap: 8px; align-items: end; }
+.tile.light { background: #fff; } .tile.dark { background: #1b1b1f; }
+.tile img { border-radius: 22%; }
+.hero img { width: 100%; border-radius: 12px; display: block; }
+.chat { display: grid; gap: 8px; }
+.msg { display: flex; gap: 10px; align-items: flex-start; background: var(--chat); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.msg img { width: 40px; height: 40px; border-radius: 50%; flex: none; }
+.msg span { color: var(--muted); font: 500 0.75rem var(--mono); margin-left: 6px; }
+.missing { width: 100%; aspect-ratio: 1; border: 2px dashed var(--line); border-radius: 16px; display: grid; place-items: center; color: var(--muted); font: 500 0.8rem var(--mono); text-align: center; padding: 10px; }
+footer { color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } nav { position: static; max-height: none; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav id="nav"><b>Brand sheet</b></nav>
+<main>
+  <header id="top">
+    <h1>Ardengard brand sheet</h1>
+    <p class="lede">One living sheet for every icon and mascot round, newest first. Chips mark what is current, still open or rejected. Palette: forest #1F4D3A, ember #E0A23B, parchment #F6F0E1, slate #2E3A44.</p>
+    <p class="sub" id="updated"></p>
+  </header>
+  <div id="rounds" style="display:grid;gap:40px"></div>
+  <footer>Images live in dated folders under brand/concepts/ in the ardengard repo, with each round's prompt and Codex run log. This sheet is updated in place.</footer>
+</main>
+</div>
+<script>
+var UPDATED = "Updated 2026-11-22 11:45 CT";
+var ROUNDS = [
+  { id: "icons-3", title: "App icon, round 3", status: ["Gatehouse leads; refining", "c-cur"], dir: "concepts/2026-11-22-codex-round-3/",
+    intro: "Six concepts after the leaf-key icons were rejected. Strict shape rules; each was checked at full size and at 64 and 32 px for unintended readings before showing.",
+    icons: [
+      { f: "icons/icon-1-gatehouse.png", n: "1. Gatehouse", d: "Two squat towers and a glowing arched door.", note: "Operator's favorite (closest to nice); Claude's pick too. Being refined." },
+      { f: "icons/icon-2-lit-arch.png", n: "2. Lit Arch", d: "One broad arch full of warm light.", note: "Reads more like a sunrise than a gate." },
+      { f: "icons/icon-3-crew-crown.png", n: "3. Crew Crown", d: "Five lights in an arc, the middle one gold.", note: "Reads like a loading indicator." },
+      { f: "icons/icon-4-round-key.png", n: "4. Round Key", d: "A classic key with a round bow and tower notch.", note: "Clear, but it is the stock password-manager key." },
+      { f: "icons/icon-5-owl-mark.png", n: "5. Owl Mark", d: "The Owl Warden reduced to simple shapes.", note: "Most distinctive, but a green owl face recalls Duolingo; Hootsuite also uses an owl.", warn: true },
+      { f: "icons/icon-6-shield-window.png", n: "6. Shield Window", d: "A broad shield with one lit window.", note: "Reads as a bowl or a boat." }
+    ] },
+  { id: "crew", title: "The crew, round 2", status: ["Current direction", "c-cur"], dir: "concepts/2026-11-22-codex-round-2/",
+    intro: "The mascots as the bot crew, one per role, redrawn as circular avatars that read at chat size, and the crew lineup for the README. The Heron (Reviewer) and the extended cast are not drawn yet.",
+    hero: "crew/crew-lineup.png",
+    avatars: [
+      { f: "avatars/avatar-1-owl-chief.png", n: "Owl Warden", r: "Chief of Staff", line: "Morning plan: three jobs. Approve once and I will only ask about anything off-plan." },
+      { f: "avatars/avatar-2-raven-researcher.png", n: "Raven Scribe", r: "Researcher", line: "41 of 85 rows filled, one source per row. Two sites blocked me; listed for you." },
+      { f: "avatars/avatar-3-fox-writer.png", n: "Fox", r: "Writer", line: "Draft is ready on the Mac. Nothing goes out until the reviewer passes it." },
+      { f: "avatars/avatar-4-badger-gatekeeper.png", n: "Badger Keyholder", r: "Gatekeeper", line: "The Researcher wants a saved login for one site. Allow this run?" },
+      { f: "avatars/avatar-5-stone-ops.png", n: "Stone Keeper", r: "Ops Watch", line: "Backups verified. Usage at 38% of today's cap. Nothing needs you." }
+    ] },
+  { id: "icons-2", title: "App icon, round 2", status: ["Rejected", "c-bad"], dir: "concepts/2026-11-22-codex-round-2/",
+    intro: "Modern Key Leaf variants. Rejected by the operator: the pointed leaf head split by a vein reads as a vulva, most of all in B.",
+    rejected: true,
+    icons: [
+      { f: "icons/icon-a-geometric-key.png", n: "A. Geometric key", d: "Even strokes, pointed leaf bow." },
+      { f: "icons/icon-b-negative-space.png", n: "B. Negative space", d: "Key and leaf cut from a gold tile." },
+      { f: "icons/icon-c-monoline.png", n: "C. Monoline", d: "One continuous line." }
+    ] },
+  { id: "round-1", title: "Icons and mascots, round 1", status: ["Mascots kept as the crew; icons superseded", "c-open"], dir: "concepts/2026-11-22-codex/",
+    intro: "The first five pairs in a storybook style. The mascots became the crew; the icons were replaced by later rounds.",
+    pairs: [
+      { i: "icons/icon-1-forest-keep.png", m: "mascots/mascot-1-owl-warden.png", n: "Forest Keep and Owl Warden" },
+      { i: "icons/icon-2-oak-shield.png", m: "mascots/mascot-2-fox-knight.png", n: "Oak Shield and Fox Knight" },
+      { i: "icons/icon-3-lit-gate.png", m: "mascots/mascot-3-stone-keeper.png", n: "Lit Gate and Stone Keeper" },
+      { i: "icons/icon-4-raven-tower.png", m: "mascots/mascot-4-raven-scribe.png", n: "Raven Tower and Raven Scribe" },
+      { i: "icons/icon-5-key-leaf.png", m: "mascots/mascot-5-badger-keyholder.png", n: "Key Leaf and Badger Keyholder" }
+    ] }
+];
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+function img(src, alt, cls, size) {
+  var i = new Image(); i.alt = alt; if (cls) i.className = cls; if (size) { i.width = size; i.height = size; }
+  i.src = src; i.onerror = function () { i.replaceWith(el("div", "missing", "Missing: " + src)); }; return i;
+}
+function sizes(src, n) {
+  var s = el("div", "sizes");
+  ["light", "dark"].forEach(function (k) { var t = el("div", "tile " + k); t.appendChild(img(src, n + " 64 px", null, 64)); t.appendChild(img(src, n + " 32 px", null, 32)); s.appendChild(t); });
+  return s;
+}
+document.getElementById("updated").textContent = UPDATED;
+var host = document.getElementById("rounds"), nav = document.getElementById("nav");
+ROUNDS.forEach(function (r) {
+  var s = el("section"); s.id = r.id;
+  var h = el("div", "head"); h.appendChild(el("h2", null, r.title)); h.appendChild(el("span", "chip " + r.status[1], r.status[0])); s.appendChild(h);
+  s.appendChild(el("p", "sub", r.intro));
+  if (r.hero) { var hd = el("div", "card hero"); hd.appendChild(img(r.dir + r.hero, "The crew at the gate")); s.appendChild(hd); }
+  if (r.icons) {
+    var g = el("div", "grid");
+    r.icons.forEach(function (x) {
+      var c = el("div", "card" + (r.rejected ? " rej" : "")); c.appendChild(img(r.dir + x.f, x.n, "big")); c.appendChild(el("h3", null, x.n)); c.appendChild(el("p", null, x.d));
+      if (x.note) c.appendChild(el("p", "note" + (x.warn ? " warn" : ""), x.note));
+      c.appendChild(sizes(r.dir + x.f, x.n)); g.appendChild(c);
+    });
+    s.appendChild(g);
+  }
+  if (r.avatars) {
+    var g2 = el("div", "grid"), chat = el("div", "card chat");
+    r.avatars.forEach(function (a) {
+      var c = el("div", "card"); c.appendChild(img(r.dir + a.f, a.n, "round")); c.appendChild(el("h3", null, a.n)); c.appendChild(el("p", null, a.r)); g2.appendChild(c);
+      var m = el("div", "msg"); m.appendChild(img(r.dir + a.f, a.n, null, 40)); var t = el("div"); var hh = el("div"); hh.appendChild(el("b", null, a.n)); hh.appendChild(el("span", null, a.r)); t.appendChild(hh); t.appendChild(el("div", null, a.line)); m.appendChild(t); chat.appendChild(m);
+    });
+    s.appendChild(g2); s.appendChild(el("h3", null, "At chat size (40 px)")); s.appendChild(chat);
+  }
+  if (r.pairs) {
+    var g3 = el("div", "grid");
+    r.pairs.forEach(function (p) {
+      var c = el("div", "card"); c.appendChild(el("h3", null, p.n)); c.appendChild(img(r.dir + p.i, p.n + " icon", "big")); c.appendChild(img(r.dir + p.m, p.n + " mascot", "mascot")); g3.appendChild(c);
+    });
+    s.appendChild(g3);
+  }
+  host.appendChild(s);
+  var a = el("a", null, r.title); a.href = "#" + r.id; nav.appendChild(a);
+});
+</script>
+</body>
+</html>

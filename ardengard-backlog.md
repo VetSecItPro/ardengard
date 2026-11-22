@@ -22,6 +22,7 @@ DONE, DROPPED. Central time on every stamp. Planned work lives in `docs/plan/pla
 | 13 | Plan phase P7: Release to the community; 5 tasks | OPEN 2026-11-22 10:43 CT |
 | 15 | Brand round 1: five mascot and icon concepts made with Codex image generation, shown on a contact sheet in the browser (operator) | WAITING ON OPERATOR 2026-11-22 11:19 CT: concepts in brand/concepts/2026-11-22-codex/; pick an icon and a mascot (can mix across concepts) |
 | 16 | Brand round 2: the mascots as the bot crew (avatars, lineup) and modern Key Leaf icon variants (operator) | WAITING ON OPERATOR 2026-11-22 11:32 CT: 9 images and contact sheet in brand/concepts/2026-11-22-codex-round-2/; operator picks the icon (Claude recommends A) and confirms the crew |
+| 17 | App icon: round 3 after the leaf-key icons were rejected; Gatehouse leads (operator), refinement round next | IN PROGRESS 2026-11-22 11:44 CT |
 
 ## Done
 
