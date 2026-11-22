@@ -402,3 +402,17 @@ Newest entries at the bottom. Central time on every entry.
 - **Claude's read:** Key Leaf is the strongest icon (one bold shape that still reads at 32 px, and keys mean permissions).
   Forest Keep reads more like a hut than a keep. Owl Warden and Raven Scribe are the strongest mascots; the raven ties to
   memory (Odin's ravens are Thought and Memory). Icons and mascots can be mixed across concepts.
+
+## 2026-11-22 11:32 CT
+
+- **Asked:** are these suitable for a Grok Bot style agent team?
+- **Answer:** partly. Grok Bot, Muse, dots and Cue use modern minimal marks, so the storybook icons look like a cozy game next
+  to them, and one mascot says "one assistant" when the product is a team. But builder communities love mascots, and the five
+  characters already map to the bot roles. Recommendation: Key Leaf as the icon, all five mascots as the default crew.
+- **Decided (operator):** reimagine it in that concept.
+- **Done:** round 2 in brand/concepts/2026-11-22-codex-round-2/: five circular crew avatars simplified for chat size (Owl
+  Warden as Chief of Staff, Raven Scribe as Researcher, Fox as Writer, Badger Keyholder as Gatekeeper, Stone Keeper as Ops
+  Watch), a crew lineup at the gate for the README, and three modern Key Leaf icons (geometric, negative space, monoline)
+  compared with the round 1 original at 64 and 32 px on light and dark. Contact sheet opened in Chrome.
+- **Claude's read:** icon A (geometric key) is the strongest: modern, bold, reads at 32 px. Icon C's thin line fades at small
+  sizes; icon B's tile inside a tile looks boxed in. The lineup is ready as the README hero image.
