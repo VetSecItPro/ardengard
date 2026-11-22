@@ -1,6 +1,6 @@
 # Agent Wishlist
 
-Generated from `ideas.json` by `scripts/build_workbook.py`. Updated 2026-11-22 10:38 CT. Do not edit by hand.
+Generated from `ideas.json` by `scripts/build_workbook.py`. Updated 2026-11-22 11:37 CT. Do not edit by hand.
 
 78 ideas. MausBot column: has it, partly, or lacks it (as read 2026-11-21).
 
@@ -408,6 +408,35 @@ Ideas: #54, #70, #71
 - Reference repo: coollabsio/coolify (66323 stars, Apache-2.0): How a one-click install of a multi-container app is packaged and upgraded.
 - Reference repo: tailscale/tailscale (39429 stars, BSD-3-Clause): Running Tailscale as a container next to the stack so nothing is exposed publicly.
 - Reference repo: block/buzz (37646 stars, Apache-2.0): deploy/compose: the production stack our Compose file builds on.
+
+### Out of the box (exploring)
+
+What a newcomer gets on the first install: a safe crew, ready jobs to try, and a way to try it all before connecting real accounts.
+
+Decided:
+- The core crew ships by default, six roles: Owl Warden (Chief of Staff), Raven Scribe (Researcher), Fox (Writer), Heron (Reviewer), Badger Keyholder (Gatekeeper), Stone Keeper (Ops Watch). Heron joined the core because the review step is required (Testing and quality).
+- Every crew member has a written role: purpose, does, never does, default permissions, starter skills and routines (docs/product/crew.json, shown in The crew).
+
+Proposed, not decided:
+- Demo mode first: a sample inbox, calendar and document folder with fake data, so a newcomer sees the crew work before connecting any real account.
+- Starter jobs that run on day one against the demo data: morning brief, inbox digest, research a topic with sources, watch a web page for changes, turn notes into a one-page summary.
+- Each crew member ships as a bot folder with its instructions, two or three tested skills and safe permissions (read-only, Ask on everything).
+- A getting-to-know-you interview: the Chief of Staff asks ten questions and writes your core profile, so memory starts useful.
+- Routines library: morning brief, weekly review, inbox digest, page watcher, backup check; each off until you switch it on.
+- Crew packs by kind of user, each adding two or three roles from the extended cast: Solo founder, Small business, Developer, Researcher or student, Content creator.
+- An ardengard doctor command: checks the install, keys, Tailscale, backups, caps and permissions, and explains anything wrong in plain words.
+- A plain-language permissions page: what each bot can touch, why, and how to change it.
+- Rename and recolor: users can rename any crew member or swap the avatar; the mascots are defaults, not requirements.
+
+Open questions:
+- Does demo mode ship in release 1 or follow it?
+- Which packs ship with release 1?
+
+Ideas: #44, #62, #63, #47, #15
+- Reference repo: anthropics/skills (198894 stars, none): How to package each crew member's starter skills in the standard format.
+- Reference repo: wshobson/agents (42789 stars, MIT): How a big catalog of ready agents is organized, named and kept consistent.
+- Reference repo: VoltAgent/awesome-claude-code-subagents (26725 stars, MIT): Role definitions to borrow ideas from for crew packs (ideas only, written in our own words).
+- Reference repo: n8n-io/self-hosted-ai-starter-kit (15383 stars, Apache-2.0): How a self-hosted AI starter kit packages first-run setup and sample workflows.
 
 ### AIOS integration (exploring)
 

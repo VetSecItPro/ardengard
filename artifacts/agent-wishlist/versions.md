@@ -18,3 +18,5 @@ the operator's other Claude account, which cannot be updated from this one (17.s
 | 8 | 2026-11-22 10:31 CT | 1795365100-d78f | Fantasy-place name round |
 | 9 | 2026-11-22 10:39 CT | 1795365536-837c | Name chosen: Ardengard |
 | 10 | 2026-11-22 10:44 CT | 1795365857-522d | Rebuilt from the new 38.ardengard repo layout |
+| 11 | 2026-11-22 11:35 CT | 1795368926-b7cd | Out of the box area, extended cast |
+| 12 | 2026-11-22 11:37 CT | 1795369043-e144 | The crew section: role cards and packs |

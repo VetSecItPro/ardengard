@@ -15,3 +15,6 @@ The first name list was all real words, every one already used by other projects
 
 ## 2026-11-22 09:56 CT: a terms-of-service claim stated too strongly
 Claude said stealth browsing and CAPTCHA bypass would break sites' terms, then the operator asked why a paid service could sell it. Correction: terms bind the site's user, not the tool seller, and legality depends on the site and on logged-in versus public data. Guard: state legal points with their limits and say "not legal advice".
+
+## 2026-11-22 11:37 CT: an icon recommended without checking how its shape reads
+Claude recommended icon A (a key whose head was a pointed leaf with a center vein) without noticing that shape reads as a vulva; the operator caught it, worst in B. Correction: A, B and C dropped. Guard: every icon and mascot concept is checked for unintended readings (genital shapes, gestures, symbols of hate or of other brands) at full and small sizes before it is shown or recommended.

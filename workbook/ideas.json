@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22 10:38 CT",
+  "updated": "2026-11-22 11:37 CT",
   "themes": [
     {
       "key": "core",
@@ -2690,6 +2690,76 @@
           "license": "Apache-2.0",
           "what": "The Buzz relay, mobile client and deploy bundle.",
           "study": "deploy/compose: the production stack our Compose file builds on.",
+          "copyleft": false
+        }
+      ]
+    },
+    {
+      "key": "starter",
+      "name": "Out of the box",
+      "status": "exploring",
+      "summary": "What a newcomer gets on the first install: a safe crew, ready jobs to try, and a way to try it all before connecting real accounts.",
+      "decided": [
+        "The core crew ships by default, six roles: Owl Warden (Chief of Staff), Raven Scribe (Researcher), Fox (Writer), Heron (Reviewer), Badger Keyholder (Gatekeeper), Stone Keeper (Ops Watch). Heron joined the core because the review step is required (Testing and quality).",
+        "Every crew member has a written role: purpose, does, never does, default permissions, starter skills and routines (docs/product/crew.json, shown in The crew)."
+      ],
+      "proposed": [
+        "Demo mode first: a sample inbox, calendar and document folder with fake data, so a newcomer sees the crew work before connecting any real account.",
+        "Starter jobs that run on day one against the demo data: morning brief, inbox digest, research a topic with sources, watch a web page for changes, turn notes into a one-page summary.",
+        "Each crew member ships as a bot folder with its instructions, two or three tested skills and safe permissions (read-only, Ask on everything).",
+        "A getting-to-know-you interview: the Chief of Staff asks ten questions and writes your core profile, so memory starts useful.",
+        "Routines library: morning brief, weekly review, inbox digest, page watcher, backup check; each off until you switch it on.",
+        "Crew packs by kind of user, each adding two or three roles from the extended cast: Solo founder, Small business, Developer, Researcher or student, Content creator.",
+        "An ardengard doctor command: checks the install, keys, Tailscale, backups, caps and permissions, and explains anything wrong in plain words.",
+        "A plain-language permissions page: what each bot can touch, why, and how to change it.",
+        "Rename and recolor: users can rename any crew member or swap the avatar; the mascots are defaults, not requirements."
+      ],
+      "open": [
+        "Does demo mode ship in release 1 or follow it?",
+        "Which packs ship with release 1?"
+      ],
+      "facts": [
+        "Extended cast, added by packs: Hare (Inbox Steward), Rooster (Morning Brief and Scheduler), Squirrel (Memory Keeper), Hawk (Watcher), Mole (Builder), Porcupine (Security Tester), Mouse (Bookkeeper), Robin (Messenger), Stag (Guide, first run only). Full role cards in The crew.",
+        "Avoided because a well-known product already uses the animal: hedgehog (PostHog), beaver (DBeaver), tortoise (TortoiseGit), firefly (Adobe Firefly), otter (FerryMail's own mascot), bee (Buzz), lobster (OpenClaw)."
+      ],
+      "ideas": [
+        44,
+        62,
+        63,
+        47,
+        15
+      ],
+      "repos": [
+        {
+          "repo": "anthropics/skills",
+          "stars": 198894,
+          "license": "none",
+          "what": "Official public repository of Agent Skills.",
+          "study": "How to package each crew member's starter skills in the standard format.",
+          "copyleft": false
+        },
+        {
+          "repo": "wshobson/agents",
+          "stars": 42789,
+          "license": "MIT",
+          "what": "Large collection of plugins, agents, skills and commands for Claude Code and other agent tools.",
+          "study": "How a big catalog of ready agents is organized, named and kept consistent.",
+          "copyleft": false
+        },
+        {
+          "repo": "VoltAgent/awesome-claude-code-subagents",
+          "stars": 26725,
+          "license": "MIT",
+          "what": "A collection of 100+ specialized Claude Code subagents.",
+          "study": "Role definitions to borrow ideas from for crew packs (ideas only, written in our own words).",
+          "copyleft": false
+        },
+        {
+          "repo": "n8n-io/self-hosted-ai-starter-kit",
+          "stars": 15383,
+          "license": "Apache-2.0",
+          "what": "Open-source template that sets up a local AI stack with one command.",
+          "study": "How a self-hosted AI starter kit packages first-run setup and sample workflows.",
           "copyleft": false
         }
       ]

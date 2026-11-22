@@ -62,6 +62,25 @@ def write_build_md(bdir: pathlib.Path, prd: dict, plan: dict) -> None:
     (ROOT / "docs" / "plan" / "plan.md").write_text("\n".join(b))
 
 
+def write_crew_md(path: pathlib.Path, crew: dict) -> None:
+    """Generate crew.md from crew.json."""
+    names = {r["id"]: r["mascot"] for r in crew["roles"]}
+    c = [f"# {crew['title']}", "", f"Status: {crew['status']}. Updated {crew['updated']}. Generated from crew.json; do not edit by hand.", "", "## Rules", ""]
+    c += [f"- {x}" for x in crew["rules"]] + ["", "## Permission levels", ""]
+    c += [f"- **{k}:** {v}" for k, v in crew["permission_levels"].items()] + [""]
+    for tier in ("core", "extended"):
+        c += [f"## {'Core crew' if tier == 'core' else 'Extended cast'}", ""]
+        for r in crew["roles"]:
+            if r["tier"] != tier:
+                continue
+            c += [f"### {r['mascot']}: {r['role']}", "", r["purpose"], "", "Does:"] + [f"- {x}" for x in r["does"]]
+            c += ["", "Never:"] + [f"- {x}" for x in r["never"]]
+            c += ["", "Permissions: " + "; ".join(f"{k}: {v}" for k, v in r["permissions"].items()) + "."]
+            c += ["", "Starter skills: " + ", ".join(r["skills"]) + ". Routines: " + (", ".join(r["routines"]) or "none") + ". Works with: " + r["works_with"] + ".", ""]
+    c += ["## Packs", ""] + [f"- **{p['name']}:** " + ", ".join(names[x] for x in p["roles"]) for p in crew["packs"]] + [""]
+    path.write_text("\n".join(c))
+
+
 def main() -> int:
     data = json.loads((ROOT / "workbook" / "ideas.json").read_text())
     ids = [i["id"] for i in data["ideas"]]
@@ -76,6 +95,13 @@ def main() -> int:
     bdir = ROOT / "docs"
     data["prd"] = json.loads((bdir / "product" / "prd.json").read_text())
     data["plan"] = json.loads((bdir / "plan" / "plan.json").read_text())
+    data["crew"] = json.loads((bdir / "product" / "crew.json").read_text())
+    role_ids = {r["id"] for r in data["crew"]["roles"]}
+    for pk in data["crew"]["packs"]:
+        for rid in pk["roles"]:
+            if rid not in role_ids:
+                sys.exit(f"crew pack '{pk['name']}' names unknown role {rid}")
+    write_crew_md(bdir / "product" / "crew.md", data["crew"])
     rids = {r["id"] for r in data["prd"]["requirements"]}
     akeys = {a["key"] for a in data.get("areas", [])}
     for r in data["prd"]["requirements"]:

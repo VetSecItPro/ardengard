@@ -416,3 +416,27 @@ Newest entries at the bottom. Central time on every entry.
   compared with the round 1 original at 64 and 32 px on light and dark. Contact sheet opened in Chrome.
 - **Claude's read:** icon A (geometric key) is the strongest: modern, bold, reads at 32 px. Icon C's thin line fades at small
   sizes; icon B's tile inside a tile looks boxed in. The lineup is ready as the README hero image.
+
+## 2026-11-22 11:35 CT
+
+- **Asked:** other roles we could create mascots for, and what else to provide out of the box for someone installing it.
+- **Answer:** ten more roles for an extended cast (Hare, Inbox Steward; Rooster, Morning Brief; Squirrel, Memory Keeper; Heron,
+  Reviewer; Hawk, Watcher; Mole, Builder; Porcupine, Security Tester; Mouse, Bookkeeper; Robin, Messenger; Stag, Guide),
+  avoiding animals other products already own (hedgehog, beaver, tortoise, firefly, otter, bee, lobster). New design area
+  Out of the box: the core five ship by default; proposed demo mode with fake data, five day-one starter jobs, bot folders with
+  tested skills and safe permissions, a getting-to-know-you interview for the core profile, a routines library, crew packs by
+  kind of user, an ardengard doctor command, a plain-language permissions page, rename and recolor. Four reference repos
+  verified with gh (crewAI-examples dropped: archived).
+
+## 2026-11-22 11:37 CT
+
+- **Operator:** each one will have a role defined for its purpose.
+- **Done:** crew catalog docs/product/crew.json (draft for approval), shown in a new The crew section and generated as
+  crew.md. Five rules (one role per bot; the never list is enforced by the gatekeeper; only the operator widens permissions;
+  one writer per task; rename and recolor allowed), four permission levels (read, draft, ask, never), and fifteen role cards
+  with purpose, does, never, default permissions, starter skills, routines and who each works with. Core crew of six: Owl
+  Warden, Raven Scribe, Fox, Heron (Reviewer, added to the core because the review step is required), Badger Keyholder, Stone
+  Keeper. Extended cast of nine. Packs: Solo founder, Small business, Developer, Researcher or student, Content creator, First run.
+- **Operator:** does not like icons A, B or C; the leaf-shaped key head looks like a vulva, especially B.
+- **Correction (Claude):** agreed; a pointed oval split by a center line reads that way, and Claude recommended A without
+  seeing it. A, B and C are dropped; icon round 3 avoids that shape and every concept is checked for unintended readings first.
